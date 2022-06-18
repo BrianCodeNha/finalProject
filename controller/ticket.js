@@ -51,6 +51,20 @@ console.log("🚀 ~ file: ticket.js ~ line 42 ~ addTicket ~ req", req.body)
    }
 }
 
+export const editTicket = async(req, res) => {    
+console.log("🚀 ~ file: ticket.js ~ line 42 ~ addTicket ~ req", req.body)
+   try {
+    const updatedTicket = req.body;
+    const id = updatedTicket.id;
+    await Ticket.findByIdAndUpdate(id, updatedTicket)
+    await Ticket.find().then(tickets => {
+        res.status(200).json(tickets)
+    })
+   } catch (error) {
+       res.status(500).json({error: error})       
+   } 
+}
+
 export const deleteTicket = async (req, res) => {
     const id = req.params.id
     console.log("🚀 ~ file: ticket.js ~ line 42 ~ deleteTicket ~ id", id)
