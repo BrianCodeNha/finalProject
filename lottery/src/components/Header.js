@@ -22,7 +22,7 @@ export default function Header() {
               <i className="fa fa-blog"></i> Blog
             </NavLink>
           </Nav>
-          <Nav me style={{paddingRight: '20px'}}>
+          <Nav style={{paddingRight: '20px'}}>
           <NavLink to="/login" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
               <i className="fa fa-user"></i> Login
             </NavLink>

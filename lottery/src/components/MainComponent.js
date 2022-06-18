@@ -5,8 +5,6 @@ import Employee from "./Employee";
 import SearchPage from "./SearchPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Staff from "./Staff";
-import Department from "./Department";
-import Salary from "./Salary";
 import { connect } from "react-redux";
 import {
   fetchDepartments,
@@ -15,8 +13,9 @@ import {
   postStaff,
   deleteEmployee,
   deleteSelectedItem,
+  updateEmployee,
 } from "../Redux/ActionCreator";
-import Test from "./test";
+
 import QuanLyVeDo from "./QuanLyVeDo";
 import { VeDoEdit } from "./VeDoEdit";
 import axios from "axios";
@@ -73,6 +72,9 @@ const mapDispatchToProp = (dispatch) => ({
   deleteSelectedItem: (idList) => {
     dispatch(deleteSelectedItem(idList));
   },
+  updateEmployee: (id, updatedTicket) => {
+    dispatch(updateEmployee(id, updatedTicket));
+  }
 });
 
 export function MainComponent({
@@ -80,6 +82,7 @@ export function MainComponent({
   isLoading,
   errMess,
   fetchStaffs,
+  updateEmployee,
   deleteEmployee,
   deleteSelectedItem
 }) {
@@ -139,6 +142,7 @@ export function MainComponent({
           (staff) => staff._id === match.params.staffId.toString()
         )[0]
       }
+      updateEmployee={updateEmployee}
       isLoading={isLoading}
       errMess={errMess}
     />

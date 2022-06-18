@@ -4,9 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 function DeleteModalMany({setDeleteList, deleteList, deleteSelectedItem }) {
   //modal xac nhan delete
   const [show, setShow] = useState(false);
-
   const handleShow = () => setShow(true);
-
   const handleClose = () => {
     setShow(false);
   };
