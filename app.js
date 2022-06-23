@@ -15,10 +15,11 @@ import cheerio from 'cheerio';
 //routers
 import authenticatedUser from './routes/authenticatedUser.js'
 import adminRoutes from './routes/adminRoutes.js'
+import authen from './routes/authen.js'
 
-
-
-
+//create session and store in mongodb
+import session from 'express-session';
+import connectMongoDBSession from 'connect-mongodb-session'
 
 // databaseURI
 const MONGODB_URI =
@@ -30,13 +31,28 @@ const PORT = process.env.PORT || 5000;
 
 // all request will go through the below middleware because no route isplaced before them forEx app.use('/', cors) -> only use cors for req to /
 
+// create and setup session
+const MongoDBStore = (connectMongoDBSession)(session);
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: 'sessions'
+})
+
+app.use(session({ 
+  store: store,
+  resave:false,
+  saveUninitialized: false,
+  secret: 'i am a secret'
+}))
+
 app.set('view engine', 'ejs')
 app.set('views', './views')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
 app.use(cors())
 
-
+app.use('/authen', authen)
 
 app.use('/user', authenticatedUser)
 app.use('/admin', adminRoutes)

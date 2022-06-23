@@ -1,5 +1,6 @@
 import express from 'express';
-import { getUser } from '../controller/authenticatedUser.js';
+import { deleteManyUsers, deleteUser, updateUser } from '../controller/admin.js';
+import { addUser, createFakeUser, getUser } from '../controller/authenticatedUser.js';
 import { createCheckTicket, getCheckTicket } from '../controller/checkTicket.js';
 import { deleteTicket, getTicket } from '../controller/ticket.js';
 
@@ -9,7 +10,17 @@ router.get('/', (req, res) => {
     res.send('admin Panel!')
 })
 
+router.get('/fakeuser', createFakeUser)
+
 router.get('/user', getUser);
+
+router.post('/user', addUser);
+
+router.put('/user/:id', updateUser);
+
+router.post('/user/deletemany', deleteManyUsers);
+
+router.delete('/user/:id', deleteUser);
 
 router.get('/ticket', getTicket)
 

@@ -4,7 +4,7 @@ import { addTicket, createFakeTicket, deleteManyTicket, deleteTicket, editTicket
 
 const router = express.Router();
 
-router.get('/', getUser);
+// router. get('/fakeTicket', createFakeTicket);
 
 router.delete('/ticket/:id', deleteTicket)
 
