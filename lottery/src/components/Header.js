@@ -18,13 +18,16 @@ export default function Header() {
             <NavLink to="/veso" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
               <i className="fa fa-money-check"></i> Quản Lý Vé Số
             </NavLink>
-            <NavLink to="/blog" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
-              <i className="fa fa-blog"></i> Blog
+            <NavLink to="/admin/user" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
+              <i className="fa fa-users "></i> Quản Lý User
             </NavLink>
           </Nav>
           <Nav style={{paddingRight: '20px'}}>
           <NavLink to="/login" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
               <i className="fa fa-user"></i> Login
+            </NavLink>
+          <NavLink to="/signup" style={{borderRadius: 25, backgroundColor: '#FEFEFE', paddingLeft: '10px', paddingRight: '10px'}}>
+              <i className="fa fa-user-plus"></i> Sign Up
             </NavLink>
           </Nav>
         </Navbar.Collapse>

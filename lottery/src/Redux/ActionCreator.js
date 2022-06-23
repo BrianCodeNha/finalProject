@@ -43,6 +43,40 @@ export const postStaff = (newVeSo) => (dispatch) => {
     });
 };
 
+export const postUser = (newVeSo) => (dispatch) => {
+  console.log("🚀 ~ file: ActionCreator.js ~ line 13 ~ newVeSo", newVeSo);
+
+  return axios
+    .post(backEndURL + "user/ticket", newVeSo)
+    .then(
+      (response) => {
+        console.log(
+          "🚀 ~ file: ActionCreator.js ~ line 19 ~ response",
+          response.data
+        );
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      dispatch(addStaff(response.data));
+    })
+    .catch((err) => {
+      console.log("add ve so", err.message);
+      alert("loi them ve số Error: " + err.message);
+    });
+};
+
 // DELETE employee
 
 export const deleteEmployee = (id, number, producer) => (dispatch) => {
@@ -75,6 +109,36 @@ export const deleteEmployee = (id, number, producer) => (dispatch) => {
     });
 };
 
+export const deleteUser = (id, name , email) => (dispatch) => {
+  return axios
+    .delete(`http://localhost:5000/admin/user/${id}`)
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      alert(`Đã xoá thành công user: ${name} - email: ${email}`);
+      dispatch(addUser(response.data));
+    })
+    .catch((err) => {
+      console.log("delete user", err.message);
+      alert("delete user error: " + err.message);
+    });
+};
+
 export const deleteSelectedItem = (idList) => (dispatch) => {
   return axios
     .post(`http://localhost:5000/user/ticket/deletemany`, {
@@ -100,6 +164,38 @@ export const deleteSelectedItem = (idList) => (dispatch) => {
     .then((response) => {
       alert(`Đã xoá thành công những vé số được chọn`);
       dispatch(addStaff(response.data));
+    })
+    .catch((err) => {
+      console.log("delete", err.message);
+      alert("delete error: " + err.message);
+    });
+};
+
+export const deleteSelectedUser = (idList) => (dispatch) => {
+  return axios
+    .post(`http://localhost:5000/admin/user/deletemany`, {
+      idList: idList,
+    })
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      alert(`Đã xoá thành công những users được chọn`);
+      dispatch(addUser(response.data));
     })
     .catch((err) => {
       console.log("delete", err.message);
@@ -138,6 +234,36 @@ export const updateEmployee = (id, updatedTicket) => (dispatch) => {
       alert("updatedEmployee error: " + err.message);
     });
 };
+export const updateUser = (id, updatedUser) => (dispatch) => {
+  console.log('updating user')
+  axios
+    .put(backEndURL + `admin/user/${id}`, updatedUser)
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((data) => {
+      alert(`Đã cập nhật thành công thông tin user ${updatedUser.username}`);
+      dispatch(addUser(data.data));
+    })
+    .catch((err) => {
+      console.log("updatedEmployee", err.message);
+      alert("updatedEmployee error: " + err.message);
+    });
+};
 
 // fetch staff from server
 
@@ -167,6 +293,33 @@ export const fetchStaffs = () => (dispatch) => {
     .catch((error) => dispatch(staffLoadingFailed(error.message)));
 };
 
+export const fetchUsers = () => (dispatch) => {
+  dispatch(staffLoading(true));
+
+  return fetch("http://localhost:5000/admin/user")
+    .then(
+      (response) => {
+      console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response", response)
+        if (response.ok) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
+    .then((response) => response.json())
+    .then((users) => dispatch(addUser(users)))
+    .catch((error) => dispatch(staffLoadingFailed(error.message)));
+};
+
 // fetch vedo from server
 
 export const fetchVeDo = (veDoList) => (dispatch) => {
@@ -182,6 +335,11 @@ export const addVeDo = (veDoList) => ({
 export const addStaff = (staff) => ({
   type: ActionTypes.LOAD_STAFFS,
   payload: staff,
+});
+
+export const addUser = (users) => ({
+  type: ActionTypes.LOAD_USERS,
+  payload: users,
 });
 
 export const staffLoading = () => ({

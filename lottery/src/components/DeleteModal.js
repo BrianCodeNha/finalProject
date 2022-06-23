@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
-function DeleteModal({ staff, deleteEmployee }) {
+function DeleteModal({ staff, deleteEmployee, signal, role }) {
   //modal xac nhan delete
   const [show, setShow] = useState(false);
 
@@ -22,22 +22,21 @@ function DeleteModal({ staff, deleteEmployee }) {
           <Modal.Title>Xác nhận xoá</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Bạn có chắc chắn muốn xoá vé số này? <br />
-          Đài: {staff.producer}  <br />
-          Số: {staff.number} 
+          {signal === 'veso' && (`bạn có chắc chắn xoá dự liệu: Đài: ${staff.producer} - số: ${staff.number}`)} 
+          {(signal === 'user' && role === 'user') ? (`bạn có chắc chắn xoá dự liệu: username: ${staff.userName} - email: ${staff.email}`) : `Bạn không thể xoá user có vai trò là admin!!!`} 
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
-          <Button
+          {role === 'user' && <Button
             variant="primary"
-            onClick={() => {
-              return deleteEmployee(staff._id, staff.number, staff.producer);
+            onClick={() => {              
+              return deleteEmployee(staff._id , signal === 'veso' ? staff.number : staff.userName, signal === 'veso' ? staff.producer : staff.email);
             }}
           >
             Delete
-          </Button>
+          </Button>}
         </Modal.Footer>
       </Modal>
     </div>

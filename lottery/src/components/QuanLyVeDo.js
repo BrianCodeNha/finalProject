@@ -4,6 +4,7 @@ import axios from "axios";
 import { FadeTransform } from "react-animation-components";
 import { Link } from "react-router-dom";
 import { fetchVeDo } from "../Redux/ActionCreator";
+import { SearchBar } from "./SearchBar";
 
 function QuanLyVeDo(props) {
   const [show, setShow] = useState(false);
@@ -353,7 +354,11 @@ function QuanLyVeDo(props) {
           </Modal>
         </div>
       </div>
-
+      <SearchBar
+      getSortEntry={(entry) => props.getSortEntry(entry)}
+      
+      signal='vedo'
+    />
       <div className="row cod-flex p-2">{veDoDetails}</div>
     </div>
   );

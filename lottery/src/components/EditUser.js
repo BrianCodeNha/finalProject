@@ -1,31 +1,32 @@
 import React, { useState } from "react";
-import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdb-react-ui-kit";
 import { Loading } from "./Loading";
 import "./Employee.css";
-import { updateEmployee } from "../Redux/ActionCreator";
+import {  updateEmployee, updateUser } from "../Redux/ActionCreator";
 import { connect } from "react-redux";
 import { backEndURL } from "../shared/baseUrl";
 
 const mapDispatchToProps = (dispatch) => ({
-  // updateEmployee: (editId, Editedemployee) =>
-  //   dispatch(updateEmployee(editId, Editedemployee)),
+  updateUser: (editId, Editedemployee) =>
+    dispatch(updateUser(editId, Editedemployee)),
 });
 
-export function Employee(props) {
+export function EditUser(props) {
   //truyền data fetch từ server truyền vào props
-  
 
   const EmployeeDetail = () => {
 
-    const [updatedTicket, setUpdatedTicket] = useState({
-      date: props.staff.date,
-      number: props.staff.number,
-      producer: props.staff.producer,
-      userId: props.staff.userId,
+    const [updateUser, setUpdateUser] = useState({
+      username: props.staff.username,
+      email: props.staff.email,
+      password: props.staff.password,
+      phone: props.staff.phone,
+      role: props.staff.role,
       id: props.staff._id,
     });
+    console.log("🚀 ~ file: EditUser.js ~ line 28 ~ EmployeeDetail ~ updateUser", updateUser)
+
 
     if (props.isLoading) {
       return (
@@ -44,71 +45,71 @@ export function Employee(props) {
         </div>
       );
     } else if (props.staff != null) {
-      console.log(
-        "🚀 ~ file: Employee.js ~ line 34 ~ EmployeeDetail ~ props.staff",
-        props.staff
-      );      
+           
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(updatedTicket);
-        props.updateEmployee(updatedTicket.id, updatedTicket);
-        console.log("🚀 ~ file: Employee.js ~ line 56 ~ handleSubmit ~ props.updateEmployee", props.updateEmployee)
+        console.log( 'update user',updateUser);
+        console.log('function',props.updateUser)
+        props.updateUser(updateUser.id, updateUser);
       };
 
       const handleChange = (e) => {
         const { name, value } = e.target;
-        return setUpdatedTicket({ ...updatedTicket, [name]: value });
+        return setUpdateUser({ ...updateUser, [name]: value });
       };
 
       return (
         <div className="staff row container">
           <MDBBreadcrumb>
             <MDBBreadcrumbItem>
-              <Link to="/veso">Quản Lý Vé Số</Link>
+              <Link to="/admin/user">Quản Lý Users</Link>
             </MDBBreadcrumbItem>
-            <MDBBreadcrumbItem active>{props.staff.number}</MDBBreadcrumbItem>
+            <MDBBreadcrumbItem active>{props.staff.username}</MDBBreadcrumbItem>
           </MDBBreadcrumb>
           <div className="col-12 col-md-4 col-lg-3"></div>
           <div className="col-12 col-md-8 col-lg-9">
-            <h3>Số vé số: {props.staff.number}</h3>
+            <h3>Username: {props.staff.username}</h3>
             <p>
-              Đài xổ số: {props.staff.producer}
+              Email: {props.staff.email}
               <br />
-              Ngày xổ Số: {props.staff.date}
+              Phone: {props.staff.phone}
               <br />
+              Role: {props.staff.role}
+              <br />
+              Passwords: <input type="password" value={props.staff.password} editable='false' readOnly={true} />
             </p>
-            <h3>KẾT QUẢ XỔ SỐ: {props.staff.result}</h3>
+            
             <hr />
-            <h3>Cập nhật thông tin vé số</h3>
+            <h3>Cập nhật thông tin USER</h3>
             <form onSubmit={handleSubmit}>
               <label htmlFor="number" className="row container">
-                Đài xổ số:
+                Username:
                 <input
                   type="text"
-                  name="number"
-                  value={updatedTicket.number}
+                  name="username"
+                  value={updateUser.username}
                   onChange={(e) => handleChange(e)}
                 />
               </label>
               <label htmlFor="producer" className="row container">
-                Đài xổ số:
+                Email:
                 <input
                   type="text"
-                  name="producer"
-                  value={props.staff.producer}
+                  name="email"
+                  value={updateUser.email}
                   onChange={(e) => handleChange(e)}
                 />
               </label>
               <label htmlFor="date" className="row container">
-                Ngày xổ số:
+                Phone:
                 <input
-                  type="date"
-                  name="date"
-                  value={props.staff.date}
+                  type="text"
+                  name="phone"
+                  value={updateUser.phone}
                   onChange={(e) => handleChange(e)}
                 />
-              </label>
+              </label>             
               <button type="submit">update</button>
             </form>
           </div>
@@ -119,4 +120,4 @@ export function Employee(props) {
   return <EmployeeDetail />;
 }
 
-export default connect(null, mapDispatchToProps)(Employee);
+export default connect(null, mapDispatchToProps)(EditUser);

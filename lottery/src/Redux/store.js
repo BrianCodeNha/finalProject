@@ -6,6 +6,7 @@ import logger from "redux-logger";
 const reducer = (
   state = {    
     staffList: [],
+    users: [],
     veDoList: [],
     isLoading: false,
     errMess: null,
@@ -19,6 +20,8 @@ const reducer = (
         return {...state, staffList: action.payload}
     case ActionTypes.LOAD_STAFFS:
         return {...state, staffList: action.payload, isLoading: false, errMess: null}
+    case ActionTypes.LOAD_USERS:
+        return {...state, users: action.payload, isLoading: false, errMess: null}
     case ActionTypes.LOAD_VEDO:
         return {...state, veDoList: action.payload, isLoading: false, errMess: null}
     case ActionTypes.STAFFS_LOADING:

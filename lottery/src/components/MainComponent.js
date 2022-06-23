@@ -6,24 +6,31 @@ import SearchPage from "./SearchPage";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Staff from "./Staff";
 import { connect } from "react-redux";
-import {
-  fetchDepartments,
+import {  
   fetchStaffs,
-  fetchSalary,
   postStaff,
   deleteEmployee,
   deleteSelectedItem,
   updateEmployee,
+  fetchUsers,
+  deleteSelectedUser,
+  deleteUser,
+  updateUser,
 } from "../Redux/ActionCreator";
 
 import QuanLyVeDo from "./QuanLyVeDo";
+import ManageUser from "./ManageUser";
 import { VeDoEdit } from "./VeDoEdit";
 import axios from "axios";
+import { EditUser } from "./EditUser";
+import Login from "./Login";
+import SignUp from "./SignUp";
 
 // get state, and dispatch from store
 
 const mapStateToProps = (state) => ({
   ticketListFromServer: state.staffList,
+  usersFromBackEnd: state.users,
   veDoList: state.veDoList,
   isLoading: state.isLoading,
   errMess: state.errMess,
@@ -34,13 +41,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProp = (dispatch) => ({
   fetchStaffs: () => {
     dispatch(fetchStaffs());
-  },
-  fetchDepartments: () => {
-    dispatch(fetchDepartments());
-  },
-  fetchSalary: () => {
-    dispatch(fetchSalary());
-  },
+  },  
+  fetchUsers: () => {
+    dispatch(fetchUsers());
+  },  
   postStaff: (
     id,
     EmployeeName,
@@ -69,41 +73,55 @@ const mapDispatchToProp = (dispatch) => ({
   deleteEmployee: (id, number, producer) => {
     dispatch(deleteEmployee(id, number, producer));
   },
+  deleteUser: (id, userName, email) => {
+    dispatch(deleteUser(id, userName, email));
+  },
   deleteSelectedItem: (idList) => {
     dispatch(deleteSelectedItem(idList));
   },
+  deleteSelectedUser: (idList) => {
+    dispatch(deleteSelectedUser(idList));
+  },
   updateEmployee: (id, updatedTicket) => {
     dispatch(updateEmployee(id, updatedTicket));
-  }
+  },
+  updateUser: (id, updatedTicket) => {
+    dispatch(updateUser(id, updatedTicket));
+  },
 });
 
 export function MainComponent({
   ticketListFromServer,
+  usersFromBackEnd,
   isLoading,
   errMess,
-  fetchStaffs,
+  fetchStaffs,  
+  fetchUsers,  
   updateEmployee,
+  updateUser,
   deleteEmployee,
-  deleteSelectedItem
+  deleteUser,
+  deleteSelectedItem,
+  deleteSelectedUser,
 }) {
   //store stafflist here
-  const [staffList, setStaffList] = useState([]);
   const [veDoList, setVeDoList] = useState([]);
+
 
   useEffect(() => {
     // insert mapDispatchToProp
     fetchStaffs();
-    const fetchDataVeDo = async () => {
-     
-      const response = await axios.get(
+    fetchUsers();
+    const fetchDataVeDo = async () => {     
+      const response1 = await axios.get(
         "http://localhost:5000/admin/checkticket"
       );
-      setVeDoList(response.data);
-      
+     
+      setVeDoList(response1.data);    
       
     };
     fetchDataVeDo();
-  }, []); // component Did mount
+  },[] ); // component Did mount
 
   
 
@@ -117,9 +135,11 @@ export function MainComponent({
 
   // this is for sort entry
 
-  const [property, setProperty] = useState("producer"); //store sortEntry here
+  const [property, setProperty] = useState(""); //store sortEntry here
+  console.log("🚀 ~ file: MainComponent.js ~ line 132 ~ property", property)
 
   const sortDataEntry = (entry) => {
+  console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ sortDataEntry ~ entry", entry)
     setProperty(entry);
     ticketListFromServer.sort(function (a, b) {
       if (entry === "number") {
@@ -127,12 +147,28 @@ export function MainComponent({
       } else if (entry === "producer") {        
         if (a.producer.toLowerCase() > b.producer.toLowerCase()) return 1;
         else if (a.producer.toLowerCase() < b.producer.toLowerCase()) return -1;
-      }
-      if (entry === "date") {
+      } else if (entry === "date") {
         if (a.date.toLowerCase() > b.date.toLowerCase()) return 1;
         if (a.date.toLowerCase() < b.date.toLowerCase()) return -1;
-      }
+      }      
+      return null
     });
+
+    usersFromBackEnd.sort(function (a, b) {
+      if (entry === "username") {
+        if (a.username.toLowerCase() > b.username.toLowerCase()) return 1;
+        if (a.username.toLowerCase() < b.username.toLowerCase()) return -1;
+      } else if (entry === "email") {
+        if (a.email.toLowerCase() > b.email.toLowerCase()) return 1;
+        if (a.email.toLowerCase() < b.email.toLowerCase()) return -1;
+      } else if (entry === "phone") {
+        if (a.phone.toLowerCase() > b.phone.toLowerCase()) return 1;
+        if (a.phone.toLowerCase() < b.phone.toLowerCase()) return -1;
+      }      
+      return null
+    });
+
+    return null
   };
 
   const staffWithId = ({ match }) => (
@@ -149,7 +185,6 @@ export function MainComponent({
   );
 
   
-  console.log("🚀 ~ file: MainComponent.js ~ line 145 ~ veDoList", veDoList)
 
   const veDoWithId = ({ match }) => (
     <VeDoEdit
@@ -159,6 +194,19 @@ export function MainComponent({
         )[0]
       }
       isLoading={isLoading}
+      errMess={errMess}
+    />
+  );
+  
+  const userWithId = ({ match }) => (
+    <EditUser
+      staff={
+        usersFromBackEnd.filter(
+          (staff) => staff._id === match.params.userId.toString()
+        )[0]
+      }
+      isLoading={isLoading}
+      updateUser={updateUser}
       errMess={errMess}
     />
   );
@@ -173,6 +221,12 @@ export function MainComponent({
           <Route exact path="/">
           <QuanLyVeDo veDoList={veDoList} />
           </Route>
+          <Route exact path="/login">
+          <Login />
+          </Route>
+          <Route exact path="/signup">
+          <SignUp />
+          </Route>
           <Route exact path="/vedo/:veDoId">{veDoWithId}</Route>
           <Route exact path="/veso">
             <Staff
@@ -185,9 +239,21 @@ export function MainComponent({
               errorMess={errMess}
             />
           </Route>
+          <Route exact path="/admin/user">
+            <ManageUser
+              staffs={usersFromBackEnd}
+              onClick={(selectedID) => selectedEmployee(selectedID)}
+              getSortEntry={(entry) => sortDataEntry(entry)}
+              deleteEmployee={deleteUser}
+              deleteSelectedItem={deleteSelectedUser}
+              isLoading={isLoading}
+              errorMess={errMess}
+            />
+          </Route>
+          <Route exact path="/admin/user/:userId">{userWithId}</Route>
           <Route exact path="/veso/:staffId">{staffWithId}</Route>
           <Route path="/search">
-            <SearchPage staffs={ticketListFromServer} />
+            <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd}/>
           </Route>
 
         </Switch>

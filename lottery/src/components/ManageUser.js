@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Loading } from "./Loading";
-import { postStaff } from "../Redux/ActionCreator";
+import { postStaff, postUser } from "../Redux/ActionCreator";
 
 import SearchBar from "./SearchBar";
 //styles
@@ -12,7 +12,7 @@ import { FadeTransform } from "react-animation-components";
 import DeleteModal from "./DeleteModal";
 import DeleteModalMany from "./DeleteModalMany";
 
-export default function Staff(props) {
+export default function ManageUsers(props) {
   const [pageSize, setSize] = useState("20");
   const [pageNumber, setPageNumber] = useState("1");
   const [deleteList, setDeleteList] = useState([]);
@@ -51,55 +51,59 @@ export default function Staff(props) {
   const staffDetail = paginateStaffs.map((staff) => (
     <div
       key={staff._id}
-      className="outer col-12 col-md-4 col-lg-3 justify-content-center"
-      style={{ padding: "20px" }}
+      className="outer justify-content-center"
+     
     >
-      <div className="item">
+      <div className="item row">
         <FadeTransform
           in
           transformProps={{
             exitTransform: "scale(0.5) translateY(-50%)",
           }}
         >
-          <Link exact="true" to={`/veso/${staff._id}`}>
-            <div
-              onClick={() => props.onClick(staff.id)}
-              style={{
-                backgroundColor: "#EBEBEB",
-                borderRadius: "25px",
-                height: "150px",
-                width: "100%",
-                textAlign: "left",
-                padding: "10px",
-              }}
-            >
-              <strong>Đài: </strong> {staff.producer} <br />
-              <strong>Số: </strong> {staff.number}
-              <br />
-              <strong>Ngày xổ số: </strong> {staff.date}
-              <br />
-              <strong>Kết quả dò: </strong> {staff.result}
+          <div
+            onClick={() => props.onClick(staff.id)}
+            style={{
+              backgroundColor: "#EBEBEB",
+              borderRadius: "25px",
+              textAlign: "left",
+              padding: "10px",
+            }}
+          >
+            <div className="col btn-group">
+              <input
+                onClick={ onSelectDelete}
+                disabled={staff.role === 'admin' && true}
+                type="checkbox"
+                className="btn-check"
+                id={staff._id}
+                value={staff._id}
+              />
+              <label className="btn btn-outline-danger" htmlFor={staff._id}>
+                chọn
+              </label>
+
+              <DeleteModal
+                staff={staff}
+                deleteEmployee={props.deleteEmployee}
+                signal="user"
+                role={staff.role}
+              />
             </div>
-          </Link>
+            <Link exact="true" to={`/admin/user/${staff._id}`}>
+             <span className="col mx-3"> <strong >username: </strong> {staff.username} </span>
+             <span className="col mx-3"> <strong>Email: </strong> {staff.email}       </span>        
+             <span className="col mx-3"> <strong>Phone: </strong> {staff.phone}       </span>        
+             <span className="col mx-3"> <strong>Role: </strong> {staff.role}       </span>        
+            </Link>
+          </div>
         </FadeTransform>
         <div className="row">
           <div
-            className="btn-group"
+            className=""
             role="group"
             aria-label="Basic checkbox toggle button group"
-          >
-            <input
-              onClick={onSelectDelete}
-              type="checkbox"
-              className="btn-check"
-              id={staff._id}
-              value={staff._id}
-            />
-            <label className="btn btn-outline-danger" htmlFor={staff._id}>
-              Select
-            </label>
-            <DeleteModal staff={staff} deleteEmployee={props.deleteEmployee} signal='veso' />
-          </div>
+          ></div>
         </div>
       </div>
     </div>
@@ -115,7 +119,8 @@ export default function Staff(props) {
         <SearchBar
           getSortEntry={(entry) => props.getSortEntry(entry)}
           postStaff={postStaff}
-          signal='veso'
+          postUser={postUser}
+          signal='user'
         />
         <div>
           <section className="pagination d-flex justify-content-center">
@@ -143,7 +148,7 @@ export default function Staff(props) {
               <DeleteModalMany
                 setDeleteList={setDeleteList}
                 deleteList={deleteList}
-                deleteSelectedItem={props.deleteSelectedItem}
+                deleteSelectedItem={props.deleteSelectedItem}                
               />
             )}
           </section>

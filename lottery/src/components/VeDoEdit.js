@@ -75,13 +75,13 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
            <h3>Cập nhật thông tin vé số</h3>
            <form className='p-2'>           
            <label htmlFor="producer" className="row container">Đài xổ số: 
-           <input type='text' name='producer' placeholder={props.staff.producer}  onChange={(e) => handleChange(e)} />
+           <input type='text' name='producer' value={props.staff.producer}  onChange={(e) => handleChange(e)} />
            </label>
            <label htmlFor="producerId" className="row container">Mã Đài xổ số: 
-           <input type='text' name='producerId' placeholder={props.staff.producerId} onChange={(e) => handleChange(e)} />
+           <input type='text' name='producerId' value={props.staff.producerId} onChange={(e) => handleChange(e)} />
            </label>           
            <label htmlFor="date" className="row container">Ngày xổ số: {props.staff.date.split('-').reverse().join('-')}
-           <input type='date' name='date'  onChange={(e) => handleChange(e)} />
+           <input type='date' name='date' value={props.staff.date}  onChange={(e) => handleChange(e)} />
            </label>     
            <br />
            <h4>Cơ Cấu Giải Thưởng</h4>   

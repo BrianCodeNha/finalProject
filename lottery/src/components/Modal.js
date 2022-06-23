@@ -76,7 +76,7 @@ export default function AddEmployee(props) {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        <i className="fa fa-plus" /> Thêm Vé Số
+        <i className="fa fa-plus" /> Dò Vé Số
       </Button>
 
       <Modal show={show} onHide={handleClose}>
