@@ -3,30 +3,15 @@ import { useHistory } from "react-router-dom";
 import "./SearchBar.css";
 import AddEmployee from "./Modal";
 import { connect } from "react-redux";
-import { postStaff} from '../Redux/ActionCreator'
+import { postStaff, postUser} from '../Redux/ActionCreator'
 import AddUser from "./AddUser";
 
 const mapDispatchToProp = (dispatch) => ({
-    postStaff: (
-      id,
-      EmployeeName,
-      doB,
-      startDate,
-      departmentId,
-      salaryScale,
-      annualLeave,
-      overTime,
-      image) => {
-      dispatch(postStaff(
-        id,
-        EmployeeName,
-        doB,
-        startDate,
-        departmentId,
-        salaryScale,
-        annualLeave,
-        overTime,
-        image));
+    postStaff: (newVeSo) => {
+      dispatch(postStaff(newVeSo));
+    },
+    postUser: (newVeSo) => {
+      dispatch(postUser(newVeSo));
     },
 })
 

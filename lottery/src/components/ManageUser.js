@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Loading } from "./Loading";
-import { postStaff, postUser } from "../Redux/ActionCreator";
 
 import SearchBar from "./SearchBar";
 //styles
@@ -11,6 +10,7 @@ import { useState } from "react";
 import { FadeTransform } from "react-animation-components";
 import DeleteModal from "./DeleteModal";
 import DeleteModalMany from "./DeleteModalMany";
+import Switch from "react-switch";
 
 export default function ManageUsers(props) {
   const [pageSize, setSize] = useState("20");
@@ -49,11 +49,7 @@ export default function ManageUsers(props) {
   const paginateStaffs = paginate(props.staffs, pageSize, pageNumber);
 
   const staffDetail = paginateStaffs.map((staff) => (
-    <div
-      key={staff._id}
-      className="outer justify-content-center"
-     
-    >
+    <div key={staff._id} className="outer justify-content-center">
       <div className="item row">
         <FadeTransform
           in
@@ -72,8 +68,8 @@ export default function ManageUsers(props) {
           >
             <div className="col btn-group">
               <input
-                onClick={ onSelectDelete}
-                disabled={staff.role === 'admin' && true}
+                onClick={onSelectDelete}
+                disabled={staff.role === "admin" && true}
                 type="checkbox"
                 className="btn-check"
                 id={staff._id}
@@ -83,6 +79,21 @@ export default function ManageUsers(props) {
                 chọn
               </label>
 
+              <Switch
+                checked={staff.active}
+                onChange={() => props.deactivateUser(staff._id, {active: !staff.active})}
+                onColor="#86d3ff"
+                onHandleColor="#2693e6"
+                handleDiameter={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                height={20}
+                width={48}
+                className="mx-3"
+              />
+
               <DeleteModal
                 staff={staff}
                 deleteEmployee={props.deleteEmployee}
@@ -91,10 +102,22 @@ export default function ManageUsers(props) {
               />
             </div>
             <Link exact="true" to={`/admin/user/${staff._id}`}>
-             <span className="col mx-3"> <strong >username: </strong> {staff.username} </span>
-             <span className="col mx-3"> <strong>Email: </strong> {staff.email}       </span>        
-             <span className="col mx-3"> <strong>Phone: </strong> {staff.phone}       </span>        
-             <span className="col mx-3"> <strong>Role: </strong> {staff.role}       </span>        
+              <span className="col mx-3">
+                {" "}
+                <strong>username: </strong> {staff.username}{" "}
+              </span>
+              <span className="col mx-3">
+                {" "}
+                <strong>Email: </strong> {staff.email}{" "}
+              </span>
+              <span className="col mx-3">
+                {" "}
+                <strong>Phone: </strong> {staff.phone}{" "}
+              </span>
+              <span className="col mx-3">
+                {" "}
+                <strong>Role: </strong> {staff.role}{" "}
+              </span>
             </Link>
           </div>
         </FadeTransform>
@@ -118,9 +141,7 @@ export default function ManageUsers(props) {
       <div className="row cod-flex p-2 mx-5">
         <SearchBar
           getSortEntry={(entry) => props.getSortEntry(entry)}
-          postStaff={postStaff}
-          postUser={postUser}
-          signal='user'
+          signal="user"
         />
         <div>
           <section className="pagination d-flex justify-content-center">
@@ -148,7 +169,7 @@ export default function ManageUsers(props) {
               <DeleteModalMany
                 setDeleteList={setDeleteList}
                 deleteList={deleteList}
-                deleteSelectedItem={props.deleteSelectedItem}                
+                deleteSelectedItem={props.deleteSelectedItem}
               />
             )}
           </section>

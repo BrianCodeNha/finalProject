@@ -19,7 +19,8 @@ export default function AddUser({ postUser }) {
     email: "",
     password: "",
     phone: "",
-    role: ''
+    role: 'user',
+    active: true,
   };
 
   const [newUser, setNewUser] = useState(initialState);
@@ -40,6 +41,7 @@ export default function AddUser({ postUser }) {
 
   const validate = (values) => {
     const errors = {};
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     if (!values.username) {
       errors.username = "Yêu cầu nhập";
@@ -49,6 +51,8 @@ export default function AddUser({ postUser }) {
 
     if (!values.email) {
       errors.email = "Yêu cầu nhập";
+    } else if (!values.email.match(mailformat)){
+      errors.email = 'email không hợp lệ'
     }   
 
     if (!values.phone) {
@@ -71,8 +75,8 @@ export default function AddUser({ postUser }) {
     if (Object.keys(formErrors).length === 0 && isSubmit) {
       
       handleClose();           
-      console.log("🚀 ~ file: Modal.js ~ line 70 ~ handleSubmit ~ newVeSo", newUser)
       postUser(newUser);
+      console.log("🚀 ~ file: AddUser.js ~ line 78 ~ handleSubmit ~ newUser", newUser)
       setNewUser(initialState);
       
     }
@@ -91,7 +95,7 @@ export default function AddUser({ postUser }) {
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             <div className="row">
-              <Label htmlFor="name" md={4}>
+              <Label htmlFor="username" md={4}>
                 Username
               </Label>
               <Col md={7}>
@@ -99,8 +103,9 @@ export default function AddUser({ postUser }) {
                   onChange={handleChange}
                   type="text"
                   id="username"
-                  name="usernam"
+                  name="username"
                   placeholder="username"
+                  value={newUser.username}
                 />
                 <div style={{ color: "#dc3545" }}>{formErrors.username}</div>
               </Col>
@@ -117,6 +122,7 @@ export default function AddUser({ postUser }) {
                   id="email"
                   name="email"
                   placeholder="email"
+                  value={newUser.email}
                 />                
                 <div style={{ color: "#dc3545" }}>{formErrors.email}</div>
               </Col>
@@ -133,6 +139,7 @@ export default function AddUser({ postUser }) {
                   id="phone"
                   name="phone"
                   placeholder="phone"
+                  value={newUser.phone}
                 />
                 <div style={{ color: "#dc3545" }}>{formErrors.phone}</div>              
                 </Col>             
@@ -149,6 +156,7 @@ export default function AddUser({ postUser }) {
                   id="password"
                   name="password"
                   placeholder="password"
+                  value={newUser.password}
                 />
                 <div style={{ color: "#dc3545" }}>{formErrors.password}</div>              
                 </Col>             
@@ -163,7 +171,8 @@ export default function AddUser({ postUser }) {
                   onChange={handleChange}                  
                   id="role"
                   name="role"
-                  className="w-100"                  
+                  className="w-100"              
+                  value={newUser.role}  
                 >
                 <option>user</option>
                 <option>admin</option>
@@ -173,11 +182,14 @@ export default function AddUser({ postUser }) {
             </div> 
           </Modal.Body>
           <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancel
+            </Button>
             <Button variant="secondary" onClick={() => setNewUser(initialState)}>
               Reset
             </Button>
             <Button variant="primary" type="submit">
-              Thêm
+              Thêm User
             </Button>
           </Modal.Footer>
         </Form>

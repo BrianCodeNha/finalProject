@@ -16,6 +16,8 @@ import {
   deleteSelectedUser,
   deleteUser,
   updateUser,
+  deactivateUser,
+  loadUserStatus,
 } from "../Redux/ActionCreator";
 
 import QuanLyVeDo from "./QuanLyVeDo";
@@ -25,12 +27,14 @@ import axios from "axios";
 import { EditUser } from "./EditUser";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import { backEndURL } from "../shared/baseUrl";
 
 // get state, and dispatch from store
 
 const mapStateToProps = (state) => ({
   ticketListFromServer: state.staffList,
   usersFromBackEnd: state.users,
+  userStatus: state.userStatus,
   veDoList: state.veDoList,
   isLoading: state.isLoading,
   errMess: state.errMess,
@@ -88,11 +92,19 @@ const mapDispatchToProp = (dispatch) => ({
   updateUser: (id, updatedTicket) => {
     dispatch(updateUser(id, updatedTicket));
   },
+  deactivateUser: (id, activeProps) => {
+    dispatch(deactivateUser(id, activeProps));
+  },
+  loadUserStatus: (userStatus) => {
+    dispatch(loadUserStatus(userStatus));
+  },
 });
 
 export function MainComponent({
   ticketListFromServer,
   usersFromBackEnd,
+  userStatus,
+  loadUserStatus,
   isLoading,
   errMess,
   fetchStaffs,  
@@ -101,9 +113,12 @@ export function MainComponent({
   updateUser,
   deleteEmployee,
   deleteUser,
+  deactivateUser,
   deleteSelectedItem,
   deleteSelectedUser,
 }) {
+
+  axios.defaults.withcredentials = true;
   //store stafflist here
   const [veDoList, setVeDoList] = useState([]);
 
@@ -116,6 +131,12 @@ export function MainComponent({
       const response1 = await axios.get(
         "http://localhost:5000/admin/checkticket"
       );
+
+      console.log('getUserStatus')
+      const response2 = await axios.get(backEndURL + 'authen/login', {withCredentials: true})
+      console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ fetchDataVeDo ~ response2", response2)
+      loadUserStatus(response2.data)
+      console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ fetchDataVeDo ~ userStatusFromBackend", response2.data)
      
       setVeDoList(response1.data);    
       
@@ -215,20 +236,23 @@ export function MainComponent({
   return (
     <div>
       <BrowserRouter>
-        <Header />
+        <Header userStatus={userStatus} />
 
         <Switch>          
-          <Route exact path="/">
+          <Route exact='true' path="/">
           <QuanLyVeDo veDoList={veDoList} />
           </Route>
-          <Route exact path="/login">
-          <Login />
+          <Route exact='true' path="/login">
+          <Login
+          userStatus={userStatus}
+          loadUserStatus={loadUserStatus}
+          />
           </Route>
-          <Route exact path="/signup">
+          <Route exact='true' path="/signup">
           <SignUp />
           </Route>
-          <Route exact path="/vedo/:veDoId">{veDoWithId}</Route>
-          <Route exact path="/veso">
+          <Route exact='true' path="/vedo/:veDoId">{veDoWithId}</Route>
+          <Route exact='true' path="/veso">
             <Staff
               staffs={ticketListFromServer}
               onClick={(selectedID) => selectedEmployee(selectedID)}
@@ -239,19 +263,20 @@ export function MainComponent({
               errorMess={errMess}
             />
           </Route>
-          <Route exact path="/admin/user">
+          <Route exact='true' path="/admin/user">
             <ManageUser
               staffs={usersFromBackEnd}
               onClick={(selectedID) => selectedEmployee(selectedID)}
               getSortEntry={(entry) => sortDataEntry(entry)}
               deleteEmployee={deleteUser}
+              deactivateUser={deactivateUser}
               deleteSelectedItem={deleteSelectedUser}
               isLoading={isLoading}
               errorMess={errMess}
             />
           </Route>
-          <Route exact path="/admin/user/:userId">{userWithId}</Route>
-          <Route exact path="/veso/:staffId">{staffWithId}</Route>
+          <Route exact='true' path="/admin/user/:userId">{userWithId}</Route>
+          <Route exact='true' path="/veso/:staffId">{staffWithId}</Route>
           <Route path="/search">
             <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd}/>
           </Route>

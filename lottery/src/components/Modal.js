@@ -52,7 +52,9 @@ export default function AddEmployee(props) {
 
     if (!values.number) {
       errors.number = "Yêu cầu nhập";
-    }  
+    } else if (!values.number.match(/^-?\d+\.?\d*$/)) {
+      errors.number = "số vé số không hợp lệ"
+    }
 
     return errors;
   };

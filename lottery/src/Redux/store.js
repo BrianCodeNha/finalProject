@@ -6,12 +6,11 @@ import logger from "redux-logger";
 const reducer = (
   state = {    
     staffList: [],
+    userStatus: {isLoggedIn: false, active: false, role: null, errorMess: null, infoMess: null },
     users: [],
     veDoList: [],
     isLoading: false,
     errMess: null,
-    departments:[],
-    staffSalary:[]
   },
   action
 ) => {
@@ -22,16 +21,14 @@ const reducer = (
         return {...state, staffList: action.payload, isLoading: false, errMess: null}
     case ActionTypes.LOAD_USERS:
         return {...state, users: action.payload, isLoading: false, errMess: null}
+    case ActionTypes.LOAD_USER_STATUS:
+        return {...state, userStatus: action.payload, isLoading: false, errMess: null}
     case ActionTypes.LOAD_VEDO:
         return {...state, veDoList: action.payload, isLoading: false, errMess: null}
     case ActionTypes.STAFFS_LOADING:
           return {...state, staffList: [], isLoading: true, errMess: null}
     case ActionTypes.STAFFS_LOADING_FAILED:
-        return {...state, staffList: [], isLoading: false, errMess: action.payload}
-    case ActionTypes.LOAD_DEPARTMENTS:
-        return {...state, departments: action.payload}
-    case ActionTypes.LOAD_STAFF_SALARY:
-        return {...state, staffSalary: action.payload}
+        return {...state, staffList: [], isLoading: false, errMess: action.payload}    
     default:
       return state;
   }

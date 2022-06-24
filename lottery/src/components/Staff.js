@@ -114,7 +114,6 @@ export default function Staff(props) {
       <div className="row cod-flex p-2 mx-5">
         <SearchBar
           getSortEntry={(entry) => props.getSortEntry(entry)}
-          postStaff={postStaff}
           signal='veso'
         />
         <div>

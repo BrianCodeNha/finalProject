@@ -101,7 +101,7 @@ export function EditUser(props) {
                   onChange={(e) => handleChange(e)}
                 />
               </label>
-              <label htmlFor="date" className="row container">
+              <label htmlFor="phone" className="row container">
                 Phone:
                 <input
                   type="text"
@@ -110,6 +110,13 @@ export function EditUser(props) {
                   onChange={(e) => handleChange(e)}
                 />
               </label>             
+              {(props.staff.role === 'user') && <label htmlFor="role" className="row container">
+                Role:
+                <select name='role' onChange={(e) => handleChange(e)}>
+                  <option>user</option>
+                  <option>admin</option>
+                </select>
+              </label>}             
               <button type="submit">update</button>
             </form>
           </div>

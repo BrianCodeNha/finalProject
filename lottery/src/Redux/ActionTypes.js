@@ -1,5 +1,6 @@
 export const LOAD_STAFFS = "LOAD_STAFFS";
 export const LOAD_USERS = "LOAD_USERS";
+export const LOAD_USER_STATUS = "LOAD_USER_STATUS";
 export const LOAD_VEDO = "LOAD_VEDO";
 export const STAFFS_LOADING = 'STAFFS_LOADING'
 export const STAFFS_LOADING_FAILED = 'STAFFS_LOADING_FAILED'

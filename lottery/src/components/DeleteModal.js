@@ -23,20 +23,20 @@ function DeleteModal({ staff, deleteEmployee, signal, role }) {
         </Modal.Header>
         <Modal.Body>
           {signal === 'veso' && (`bạn có chắc chắn xoá dự liệu: Đài: ${staff.producer} - số: ${staff.number}`)} 
-          {(signal === 'user' && role === 'user') ? (`bạn có chắc chắn xoá dự liệu: username: ${staff.userName} - email: ${staff.email}`) : `Bạn không thể xoá user có vai trò là admin!!!`} 
+          {(signal === 'user' && role === 'admin') && (`bạn có chắc chắn xoá dự liệu: username: ${staff.userName} - email: ${staff.email}`)} 
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
           </Button>
-          {role === 'user' && <Button
+          <Button
             variant="primary"
             onClick={() => {              
               return deleteEmployee(staff._id , signal === 'veso' ? staff.number : staff.userName, signal === 'veso' ? staff.producer : staff.email);
             }}
           >
             Delete
-          </Button>}
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

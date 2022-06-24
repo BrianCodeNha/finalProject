@@ -38,16 +38,16 @@ export const postStaff = (newVeSo) => (dispatch) => {
       dispatch(addStaff(response.data));
     })
     .catch((err) => {
-      console.log("add ve so", err.message);
-      alert("loi them ve số Error: " + err.message);
+      console.log("Thêm vé số", err.message);
+      alert("lỗi thêm vé số số Error: " + err.message);
     });
 };
 
-export const postUser = (newVeSo) => (dispatch) => {
-  console.log("🚀 ~ file: ActionCreator.js ~ line 13 ~ newVeSo", newVeSo);
+export const postUser = (newUser) => (dispatch) => {
+console.log("🚀 ~ file: ActionCreator.js ~ line 47 ~ postUser ~ newUser", newUser)
 
   return axios
-    .post(backEndURL + "user/ticket", newVeSo)
+    .post(backEndURL + "admin/user", newUser)
     .then(
       (response) => {
         console.log(
@@ -69,11 +69,11 @@ export const postUser = (newVeSo) => (dispatch) => {
       }
     )
     .then((response) => {
-      dispatch(addStaff(response.data));
+      dispatch(addUser(response.data));
     })
     .catch((err) => {
-      console.log("add ve so", err.message);
-      alert("loi them ve số Error: " + err.message);
+      console.log("add user", err.message);
+      alert("loi them user Error: " + err.message);
     });
 };
 
@@ -234,6 +234,7 @@ export const updateEmployee = (id, updatedTicket) => (dispatch) => {
       alert("updatedEmployee error: " + err.message);
     });
 };
+
 export const updateUser = (id, updatedUser) => (dispatch) => {
   console.log('updating user')
   axios
@@ -257,6 +258,38 @@ export const updateUser = (id, updatedUser) => (dispatch) => {
     )
     .then((data) => {
       alert(`Đã cập nhật thành công thông tin user ${updatedUser.username}`);
+      dispatch(addUser(data.data));
+    })
+    .catch((err) => {
+      console.log("updatedEmployee", err.message);
+      alert("updatedEmployee error: " + err.message);
+    });
+};
+
+export const deactivateUser = (id, updateActiveProp) => (dispatch) => {
+  console.log('deactivate user')
+  console.log("🚀 ~ file: ActionCreator.js ~ line 269 ~ deactivateUser ~ updateActiveProp", updateActiveProp)
+  axios
+    .patch(backEndURL + `admin/user/${id}`, updateActiveProp)
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((data) => {
+      alert(`Đã cập nhật thành công trạng thái user ${updateActiveProp.active ? 'Đang hoạt động': 'không hoạt động'}`);
       dispatch(addUser(data.data));
     })
     .catch((err) => {
@@ -320,6 +353,33 @@ export const fetchUsers = () => (dispatch) => {
     .catch((error) => dispatch(staffLoadingFailed(error.message)));
 };
 
+export const fetchUserStatus = () => (dispatch) => {
+  dispatch(staffLoading(true));
+
+  return axios.get("http://localhost:5000/")
+    .then(
+      (response) => {
+      console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response.data", response.data)
+        if (response.status === 200) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
+    .then((response) => response.json())
+    .then((userStatus) => dispatch(loadUserStatus(userStatus)))
+    .catch((error) => dispatch(staffLoadingFailed(error.message)));
+};
+
 // fetch vedo from server
 
 export const fetchVeDo = (veDoList) => (dispatch) => {
@@ -340,6 +400,11 @@ export const addStaff = (staff) => ({
 export const addUser = (users) => ({
   type: ActionTypes.LOAD_USERS,
   payload: users,
+});
+
+export const loadUserStatus = (userStatus) => ({
+  type: ActionTypes.LOAD_USER_STATUS,
+  payload: userStatus,
 });
 
 export const staffLoading = () => ({

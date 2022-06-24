@@ -40,7 +40,7 @@ function QuanLyVeDo(props) {
             exitTransform: "scale(0.5) translateY(-50%)",
           }}
         >
-          <Link exact to={`/vedo/${staff._id}`}>
+          <Link exact='true' to={`/vedo/${staff._id}`}>
             <div
               style={{
                 backgroundColor: "#EBEBEB",
