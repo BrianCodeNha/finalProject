@@ -41,11 +41,18 @@ export const getTicket = (req, res) => {
 export const addTicket = async(req, res) => {    
 console.log("🚀 ~ file: ticket.js ~ line 42 ~ addTicket ~ req", req.body)
    try {
-    const newTicket = new Ticket(req.body)
-   await newTicket.save();
-    Ticket.find().then(tickets => {
-        res.status(200).json(tickets)
-    })
+
+       console.log("🚀 ~ file: ticket.js ~ line 46 ~ addTicket ~ (req.session.errors", (req.session.errors))
+    if(req.session.errors){
+        res.status(503).send(req.session.errors);
+    } else {
+        const newTicket = new Ticket(req.body)
+        await newTicket.save();
+         Ticket.find().then(tickets => {
+             res.status(200).json(tickets)
+         })
+    }
+   
    } catch (error) {
        res.status(500).json({error: error})       
    }

@@ -53,6 +53,7 @@ export const createCheckTicket = (req, res, next) => {
 
 
 export const getCheckTicket = (req, res) => {
+    console.log(req.session)
    try {
     CheckTicket.find().then(checkTickets => {
         res.status(200).json(checkTickets)

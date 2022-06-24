@@ -15,6 +15,20 @@ export const updateUser = async(req, res) => {
        } 
     }
 
+    export const deactivateUser = async(req, res) => {    
+    console.log("🚀 ~ file: admin.js ~ line 19 ~ deactivateUser ~ req", req.body)
+       try {
+        const activeStatus = req.body.active;
+        const id = req.params.id;
+        await User.findByIdAndUpdate(id, {active: activeStatus})
+        await User.find().then(users => {
+            res.status(200).json(users)
+        })
+       } catch (error) {
+           res.status(500).json({error: error})       
+       } 
+    }
+
 export const deleteManyUsers = async (req, res) => {
     const idList = req.body.idList;
     console.log("🚀 ~ file: admin.js ~ line 3 ~ deleteManyUsers ~ idList", idList)

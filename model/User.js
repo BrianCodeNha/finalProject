@@ -23,7 +23,11 @@ const userSchema = new Schema({
   username: { 
     type: String,
     require: true
-  }
+  },
+  active: { 
+    type: Boolean,
+    require: true
+  },
   
 });
 

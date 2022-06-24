@@ -13,20 +13,22 @@ export const getUser = (req, res, next) => {
 }
 
 export const addUser = async (req, res, next) => {
+console.log("🚀 ~ file: authenticatedUser.js ~ line 16 ~ addUser ~ req", req.body)
     
     try {
-    const hashPassword = bcrypt.hash(req.body.password, 10)
+    const hashPassword = await bcrypt.hash(req.body.password, 10)
     console.log("🚀 ~ file: authenticatedUser.js ~ line 18 ~ addUser ~ hashPassword", hashPassword)
     const newUser = new User({
         email: req.body.email,
-        username: req.body.username,
+        username: req.body.username, 
         phone: req.body.phone,
         role: req.body.role,
         password: hashPassword,
+        active: req.body.active 
     })
         await newUser.save();
         await User.find().then(users => {
-            res.status(200).json(users)
+            res.status(200).json(users) 
         })
     } catch (error) {
         res.status(500).json({ error: error })
@@ -51,3 +53,12 @@ export const createFakeUser = (req, res, next) => {
     })
 }
 
+
+export const checkAuthentication = (req, res, next) => {
+    const userStatus = req.session.userStatus;
+    console.log("🚀 ~ file: app.js ~ line 59 ~ app.use ~ userStatus", userStatus)
+    if(userStatus.isLoggedIn) {
+      return next();
+    }
+    
+  }
