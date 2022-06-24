@@ -60,7 +60,7 @@ app.use(session({
   saveUninitialized: false, 
   secret: 'i am a secret',
   cookie: {
-    expires: 60 * 60 * 24,
+    expires: 60 * 60 * 24 * 1000,
   }
 }))
 
@@ -86,8 +86,8 @@ app.use(session({
 // });
 
 app.use('/authen', authen)
-app.use('/user',  authenticatedUser)
 app.use('/admin',  adminRoutes)
+app.use('/user',  authenticatedUser)
 
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true } )

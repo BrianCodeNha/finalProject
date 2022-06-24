@@ -3,6 +3,7 @@ import { deactivateUser, deleteManyUsers, deleteUser, updateUser } from '../cont
 import { addUser, createFakeUser, getUser } from '../controller/authenticatedUser.js';
 import { createCheckTicket, getCheckTicket } from '../controller/checkTicket.js';
 import { deleteTicket, getTicket } from '../controller/ticket.js';
+import { verifyAdmin } from '../validation/validateData.js';
 
 const router = express.Router();
 
@@ -12,17 +13,19 @@ router.get('/', (req, res) => {
 
 // router.get('/fakeuser', createFakeUser)
 
-router.get('/user', getUser);
+router.get('/user', verifyAdmin, getUser);
 
-router.post('/user', addUser);
+router.post('/user', verifyAdmin, addUser);
 
-router.put('/user/:id', updateUser);
+router.put('/user/:id', verifyAdmin, updateUser);
 
-router.patch('/user/:id', deactivateUser);
+router.patch('/user/:id', verifyAdmin, deactivateUser);
 
-router.post('/user/deletemany', deleteManyUsers);
+router.post('/user/deletemany', verifyAdmin, deleteManyUsers);
 
-router.delete('/user/:id', deleteUser);
+router.delete('/user/:id', verifyAdmin, deleteUser);
+
+router.post('/checkticket', verifyAdmin, createCheckTicket)
 
 router.get('/ticket', getTicket)
 
@@ -30,6 +33,5 @@ router.delete('/ticket/:id', deleteTicket)
 
 router.get('/checkTicket', getCheckTicket)
 
-router.post('/checkticket', createCheckTicket)
 
 export default router;

@@ -45,7 +45,7 @@ export const createFakeUser = (req, res, next) => {
         phone: `0985${randoom1}`,
         password: `test${randoom}@admin.com`,
         username: `test${randoom}`,
-        role: `user`,
+        role: `admin`,
     })
     fakeuser.save().then(() => {
         console.log(`fakeUser${randoom} created`)

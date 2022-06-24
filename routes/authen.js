@@ -65,19 +65,40 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/login", (req, res) => {
-  const userStatus = req.session.userStatus;
-  console.log("🚀 ~ file: authen.js ~ line 68 ~ router.get ~ req.session", req.session)
-  console.log("🚀 ~ file: authen.js ~ line 68 ~ router.get ~ userStatus", userStatus)
+  if(req.session.user) {
+  const userStatus = {
+    isLoggedIn: req.session.authenticated,
+    active: req.session.user.active,
+    role: req.session.user.role,
+    errorMess: null,
+    infoMess: "Đăng nhập thành công",
+  };
 
   res
     .status(200)
     .send(userStatus)
+} else {
+  const userStatus = {
+    isLoggedIn: false,
+    active: false,
+    role: null,
+    errorMess: null,
+    infoMess: "user đã đăng xuất",
+  };
+}
 });
 
-router.get("/logout", async (req, res) => {
-  const userStatus = req.session.userStatus;
-  await req.session.destroy();
-  res.status(200).redirect('/')
+router.get("/logout",  (req, res) => {
+  console.log('logout')
+  const userStatus = {
+    isLoggedIn: false,
+    active: false,
+    role: null,
+    errorMess: null,
+    infoMess: null
+  };
+   req.session.destroy(() => res.status(200).send(userStatus));
+   
 });
 
 export default router;
