@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Employee from "./Employee";
 import SearchPage from "./SearchPage";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Staff from "./Staff";
 import { connect } from "react-redux";
 import {  
@@ -125,23 +125,22 @@ export function MainComponent({
 
   useEffect(() => {
     // insert mapDispatchToProp
-    fetchStaffs();
-    fetchUsers();
+
     const fetchDataVeDo = async () => {     
+      console.log('getdata Ve Do')
       const response1 = await axios.get(
         "http://localhost:5000/admin/checkticket"
       );
+      setVeDoList(response1.data);    
 
       console.log('getUserStatus')
       const response2 = await axios.get(backEndURL + 'authen/login', {withCredentials: true})
-      console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ fetchDataVeDo ~ response2", response2)
-      loadUserStatus(response2.data)
-      console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ fetchDataVeDo ~ userStatusFromBackend", response2.data)
-     
-      setVeDoList(response1.data);    
+      loadUserStatus(response2.data)     
       
     };
     fetchDataVeDo();
+    fetchStaffs();
+    fetchUsers();
   },[] ); // component Did mount
 
   
@@ -236,9 +235,10 @@ export function MainComponent({
   return (
     <div>
       <BrowserRouter>
-        <Header userStatus={userStatus} />
+        <Header userStatus={userStatus} loadUserStatus={loadUserStatus} />
 
         <Switch>          
+
           <Route exact='true' path="/">
           <QuanLyVeDo veDoList={veDoList} />
           </Route>
@@ -279,8 +279,9 @@ export function MainComponent({
           <Route exact='true' path="/veso/:staffId">{staffWithId}</Route>
           <Route path="/search">
             <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd}/>
-          </Route>
-
+          </Route>          
+          <Redirect to="/" />          
+         
         </Switch>
 
         <Footer />

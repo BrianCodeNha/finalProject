@@ -1,14 +1,23 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 //style
 import "./Header.css";
 import axios from "axios";
 
-export default function Header({ userStatus }) {
-  console.log("🚀 ~ file: Header.js ~ line 9 ~ Header ~ userStatus", userStatus)
-  const logout = () => axios.get('http://localhost:5000/authen/logout');
+export default function Header({ userStatus, loadUserStatus }) {
+
+  const history = useHistory();
+ 
+  const logout = () => {
+    console.log('logout');
+   axios.get("http://localhost:5000/authen/logout").then(async (response) => {
+     await loadUserStatus(response.data)
+      alert('Đăng xuất thành công');
+     return history.push('/');
+    });
+  };
   return (
     <Navbar
       expand="lg"
@@ -61,20 +70,19 @@ export default function Header({ userStatus }) {
           )}
         </Nav>
         <Nav style={{ paddingRight: "20px" }}>
-          {userStatus.isLoggedIn && (            
+          {userStatus.isLoggedIn && (
             <NavLink
-                onClick={logout}
-                to='#'
-                style={{
-                  borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                }}
-              >
+              onClick={logout}
+              to="#"
+              style={{
+                borderRadius: 25,
+                backgroundColor: "#FEFEFE",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+              }}
+            >
               <i class="far fa-user"></i> Logout
-              </NavLink>
-             
+            </NavLink>
           )}
           {!userStatus.isLoggedIn && (
             <>
@@ -91,16 +99,16 @@ export default function Header({ userStatus }) {
               </NavLink>
 
               <NavLink
-              to="/login"              
-              style={{
-                borderRadius: 25,
-                backgroundColor: "#FEFEFE",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-            >
-              <i className="fa fa-user"></i> Login
-            </NavLink>
+                to="/login"
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: "#FEFEFE",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+              >
+                <i className="fa fa-user"></i> Login
+              </NavLink>
             </>
           )}
         </Nav>

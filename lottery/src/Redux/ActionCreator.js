@@ -2,6 +2,8 @@ import * as ActionTypes from "./ActionTypes";
 import { frontEndURL, backEndURL } from "../shared/baseUrl";
 import axios from "axios";
 
+axios.defaults.withCredentials = true; // luôn phải có dòng này thì axios mới gửi cùng cookies và lấy được session.
+
 export const addNewEmployee = (newEmployee) => ({
   type: ActionTypes.ADD_NEW_EMPLOYEE,
   payload: newEmployee,
