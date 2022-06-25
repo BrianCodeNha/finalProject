@@ -23,6 +23,7 @@ import connectMongoDBSession from 'connect-mongodb-session'
 import cookieParser from 'cookie-parser';
 import { checkAuthentication } from './controller/authenticatedUser.js';
 import { User } from './model/User.js';
+import { verifyConnectEmail } from './ulti/mail.js';
 
 // databaseURI
 const MONGODB_URI =
@@ -64,26 +65,7 @@ app.use(session({
   }
 }))
 
-// app.use('/', (req, res, next) => {
-//   const userStatus = req.session.userStatus;
-//   console.log("🚀 ~ file: app.js ~ line 58 ~ app.use ~ userStatus", userStatus)
-//   res.status(200).send(userStatus);
-//   next();
-// })
-
-// app.use((req, res, next) => {
-//   if(!req.session.user){
-//     return next();
-//   }
-//   User.findById(req.session.user._id)
-//     .then((user) => {
-//       req.user = user;
-//       next();
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-// });
+verifyConnectEmail();
 
 app.use('/authen', authen)
 app.use('/admin',  adminRoutes)

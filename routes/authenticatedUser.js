@@ -1,20 +1,25 @@
 import express from 'express';
-import { createFakeUser, getUser } from '../controller/authenticatedUser.js'; // luon phai co duoi .js khi import
+import { changePassword, createFakeUser, getCurrentUser, getUser } from '../controller/authenticatedUser.js'; // luon phai co duoi .js khi import
 import { addTicket, createFakeTicket, deleteManyTicket, deleteTicket, editTicket, getTicket } from '../controller/ticket.js';
+import { verifyAuthentication } from '../validation/validateData.js';
 
 const router = express.Router();
 
 // router. get('/fakeTicket', createFakeTicket);
 
-router.delete('/ticket/:id', deleteTicket)
+router.delete('/ticket/:id', verifyAuthentication, deleteTicket)
 
-router.post('/ticket/deletemany', deleteManyTicket)
+router.post('/ticket/deletemany', verifyAuthentication, deleteManyTicket)
 
-router.get('/ticket', getTicket)
+router.post('/password', verifyAuthentication, changePassword)
 
-router.post('/ticket', addTicket)
+router.get('/', verifyAuthentication, getCurrentUser)
 
-router.put('/ticket', editTicket)
+router.get('/ticket', verifyAuthentication, getTicket)
+
+router.post('/ticket', verifyAuthentication, addTicket)
+
+router.put('/ticket', verifyAuthentication, editTicket)
 
 
 export default router;

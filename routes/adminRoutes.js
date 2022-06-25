@@ -3,7 +3,7 @@ import { deactivateUser, deleteManyUsers, deleteUser, updateUser } from '../cont
 import { addUser, createFakeUser, getUser } from '../controller/authenticatedUser.js';
 import { createCheckTicket, getCheckTicket } from '../controller/checkTicket.js';
 import { deleteTicket, getTicket } from '../controller/ticket.js';
-import { verifyAdmin } from '../validation/validateData.js';
+import { verifyAdmin, verifyAuthentication } from '../validation/validateData.js';
 
 const router = express.Router();
 
@@ -27,9 +27,9 @@ router.delete('/user/:id', verifyAdmin, deleteUser);
 
 router.post('/checkticket', verifyAdmin, createCheckTicket)
 
-router.get('/ticket', getTicket)
+router.get('/ticket', verifyAdmin,  getTicket)
 
-router.delete('/ticket/:id', deleteTicket)
+router.delete('/ticket/:id', verifyAdmin, deleteTicket)
 
 router.get('/checkTicket', getCheckTicket)
 
