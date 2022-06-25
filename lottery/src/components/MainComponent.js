@@ -28,6 +28,7 @@ import { EditUser } from "./EditUser";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import { backEndURL } from "../shared/baseUrl";
+import { UserProfile } from "./UserProfile";
 
 // get state, and dispatch from store
 
@@ -141,7 +142,7 @@ export function MainComponent({
     fetchDataVeDo();
     fetchStaffs();
     fetchUsers();
-  },[] ); // component Did mount
+  },[userStatus.role] ); // component Did mount
 
   
 
@@ -249,7 +250,10 @@ export function MainComponent({
           />
           </Route>
           <Route exact='true' path="/signup">
-          <SignUp />
+          <SignUp
+          userStatus={userStatus}
+          loadUserStatus={loadUserStatus}
+          />
           </Route>
           <Route exact='true' path="/vedo/:veDoId">{veDoWithId}</Route>
           <Route exact='true' path="/veso">
@@ -261,8 +265,21 @@ export function MainComponent({
               deleteSelectedItem={deleteSelectedItem}
               isLoading={isLoading}
               errorMess={errMess}
+              userStatus={userStatus}
             />
-          </Route>
+            </Route>
+            <Route exact='true' path="/userprofile">
+              <UserProfile
+                staffs={ticketListFromServer}
+                onClick={(selectedID) => selectedEmployee(selectedID)}
+                getSortEntry={(entry) => sortDataEntry(entry)}
+                deleteEmployee={deleteEmployee}
+                deleteSelectedItem={deleteSelectedItem}
+                isLoading={isLoading}
+                errorMess={errMess}
+                userStatus={userStatus}
+              />
+              </Route>
           <Route exact='true' path="/admin/user">
             <ManageUser
               staffs={usersFromBackEnd}

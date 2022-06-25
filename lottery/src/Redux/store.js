@@ -6,7 +6,7 @@ import logger from "redux-logger";
 const reducer = (
   state = {    
     staffList: [],
-    userStatus: {isLoggedIn: false, active: false, role: null, errorMess: null, infoMess: null },
+    userStatus: {isLoggedIn: false, active: false, role: null, errorMess: null, infoMess: null, userId: null },
     users: [],
     veDoList: [],
     isLoading: false,

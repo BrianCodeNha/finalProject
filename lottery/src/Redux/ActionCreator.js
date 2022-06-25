@@ -305,10 +305,10 @@ export const deactivateUser = (id, updateActiveProp) => (dispatch) => {
 export const fetchStaffs = () => (dispatch) => {
   dispatch(staffLoading(true));
 
-  return fetch("http://localhost:5000/user/ticket")
+  return axios.get(`http://localhost:5000/user/ticket`)
     .then(
       (response) => {
-        if (response.ok) {
+        if (response.status === 200) {
           return response;
         } else {
           var error = new Error(
@@ -323,19 +323,18 @@ export const fetchStaffs = () => (dispatch) => {
         throw errmess;
       }
     )
-    .then((response) => response.json())
-    .then((staff) => dispatch(addStaff(staff)))
+    .then((staff) => dispatch(addStaff(staff.data)))
     .catch((error) => dispatch(staffLoadingFailed(error.message)));
 };
 
 export const fetchUsers = () => (dispatch) => {
   dispatch(staffLoading(true));
-
-  return fetch("http://localhost:5000/admin/user")
+console.log('fetch user')
+  return axios.get("http://localhost:5000/admin/user")
     .then(
       (response) => {
-      console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response", response)
-        if (response.ok) {
+      console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response", response.data)
+        if (response.status === 200) {
           return response;
         } else {
           var error = new Error(
@@ -346,13 +345,13 @@ export const fetchUsers = () => (dispatch) => {
         }
       },
       (error) => {
-        var errmess = new Error(error.message);
+        var errmess = error.response.data;
         throw errmess;
       }
     )
-    .then((response) => response.json())
-    .then((users) => dispatch(addUser(users)))
-    .catch((error) => dispatch(staffLoadingFailed(error.message)));
+    .then((users) => dispatch(addUser(users.data)))
+    .catch((error) => {
+      return dispatch(staffLoadingFailed(error))});
 };
 
 export const fetchUserStatus = () => (dispatch) => {

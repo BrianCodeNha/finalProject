@@ -25,28 +25,22 @@ function Login({ userStatus, loadUserStatus }) {
     if (value.password.length === 0) {
       return setErrors({ ...errors, password: "Yêu cầu nhập password!!" });
     }
-
+    setErrors({})
     return setIsSubmit(true);
   };
 
   axios.defaults.withCredentials = true;
 
-  const handleSubmit = (e) => {
-    var headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append("Accept", "application/json");
-   
+  const handleSubmit = (e) => {    
 
     console.log("submit");
     e.preventDefault();
     validate(user);
-    if (isSubmit && !errors.password) {
-      
+    if (isSubmit) {      
       console.log("logging");     
-
       axios
         .post(backEndURL + "authen/login", user)
-        .then(async (response) => {
+        .then((response) => {
         console.log("🚀 ~ file: Login.js ~ line 65 ~ .then ~ response", response.data)
           
           loadUserStatus(response.data);

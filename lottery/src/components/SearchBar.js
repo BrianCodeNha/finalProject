@@ -64,11 +64,13 @@ export function SearchBar(props) {
         <AddEmployee 
         postStaff = {props.postStaff}
         staffList = {props.staffList}
+        userStatus = {props.userStatus}
          />
       </div>}
       {(props.signal === 'user') && <div className="my-3 mx-5">
         <AddUser 
         postUser={props.postUser}
+        userStatus = {props.userStatus}
          />
       </div>}
     </div>

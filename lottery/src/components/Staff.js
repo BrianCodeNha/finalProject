@@ -115,6 +115,7 @@ export default function Staff(props) {
         <SearchBar
           getSortEntry={(entry) => props.getSortEntry(entry)}
           signal='veso'
+          userStatus={props.userStatus}
         />
         <div>
           <section className="pagination d-flex justify-content-center">

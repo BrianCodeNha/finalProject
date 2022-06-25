@@ -18,7 +18,7 @@ export default function AddEmployee(props) {
     producer: "",
     date: "",
     number: "",
-    userId: "629c776c105e641c517df434",
+    userId: props.userStatus.userId,
   };
 
   const [newVeSo, setNewVeSo] = useState(initialState);

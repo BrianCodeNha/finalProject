@@ -7,15 +7,14 @@ import "./Header.css";
 import axios from "axios";
 
 export default function Header({ userStatus, loadUserStatus }) {
-
   const history = useHistory();
- 
+
   const logout = () => {
-    console.log('logout');
-   axios.get("http://localhost:5000/authen/logout").then(async (response) => {
-     await loadUserStatus(response.data)
-      alert('Đăng xuất thành công');
-     return history.push('/');
+    console.log("logout");
+    axios.get("http://localhost:5000/authen/logout").then(async (response) => {
+      await loadUserStatus(response.data);
+      alert("Đăng xuất thành công");
+      return history.push("/");
     });
   };
   return (
@@ -71,18 +70,31 @@ export default function Header({ userStatus, loadUserStatus }) {
         </Nav>
         <Nav style={{ paddingRight: "20px" }}>
           {userStatus.isLoggedIn && (
-            <NavLink
-              onClick={logout}
-              to="#"
-              style={{
-                borderRadius: 25,
-                backgroundColor: "#FEFEFE",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-              }}
-            >
-              <i class="far fa-user"></i> Logout
-            </NavLink>
+            <>
+              <NavLink
+                to="/userprofile"
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: "#FEFEFE",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+              >
+                <i className="fa fa-id-card"></i> User Profile
+              </NavLink>
+              <NavLink
+                onClick={logout}
+                to="#"
+                style={{
+                  borderRadius: 25,
+                  backgroundColor: "#FEFEFE",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                }}
+              >
+                <i className="fa fa-user"></i> Logout
+              </NavLink>
+            </>
           )}
           {!userStatus.isLoggedIn && (
             <>
