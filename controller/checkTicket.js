@@ -35,15 +35,12 @@ export const createCheckTicket = (req, res, next) => {
                 }                           
             },
             producer: req.body.producer,
-            producerId: req.body.producerId
         })
 
-        console.log("checkTicket", newCheckTicket);
-        
-
+        console.log("checkTicket", newCheckTicket);       
         newCheckTicket.save().then(() => {
             console.log(`new checkTicket ${req.body.producer} on ${req.body.date} created`)
-            res.send(`new checkTicket ${req.body.producer} on ${req.body.date} created`)
+            CheckTicket.find().then((checkTickets) => res.status(200).json(checkTickets))
         })
         
     } catch (error) {
@@ -62,3 +59,19 @@ export const getCheckTicket = (req, res) => {
        res.status(500).json({error: error})       
    }
 }
+
+export const deleteManyCheckTicket = async (req, res) => {
+    const idList = req.body.idList;
+    console.log("🚀 ~ file: checkTicket.js ~ line 68 ~ deleteManyCheckTicket ~ idList", idList)
+    
+    try {
+      await CheckTicket.deleteMany({ _id: idList });
+      
+        CheckTicket.find().then((tickets) => {
+          res.status(200).json(tickets);
+        });
+     
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  };

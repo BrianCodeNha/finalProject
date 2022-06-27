@@ -20,6 +20,10 @@ const ticketSchema = new Schema ({
         ref: 'User',
         required: true
     },
+    result: {
+        type: String,       
+        required: true
+    },
    
 },
 { timestamp: true}, // them truong createdAt + updatedAt

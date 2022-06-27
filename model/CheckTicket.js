@@ -6,11 +6,7 @@ const checkTicketSchema = new Schema ({
     producer: {
         type: String,
         require: true
-    },
-    producerId: {
-        type: String,
-        require: true
-    },
+    },    
     number: {
         type: Number,
         require: true

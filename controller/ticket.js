@@ -1,3 +1,4 @@
+import { CheckTicket } from "../model/CheckTicket.js";
 import { Ticket } from "../model/Ticket.js";
 import { frontEndURL } from "../shared/url.js";
 
@@ -42,21 +43,7 @@ export const createFakeTicket = (req, res, next) => {
   }
 };
 
-export const getTicket = (req, res) => {
-  console.log(
-    "🚀 ~ file: ticket.js ~ line 31 ~ getTicket ~ req",
-    req.session.user
-  );
-  if (req.session.user.role === "admin") {
-    console.log("admin ticket");
-    try {
-      Ticket.find().then((tickets) => {
-        res.status(200).json(tickets);
-      });
-    } catch (error) {
-      res.status(500).json({ error: error });
-    }
-  } else {
+export const getUserTicket = (req, res) => { 
     console.log("user Ticket");
     try {
       Ticket.find({ userId: req.session.user._id }).then((tickets) => {
@@ -69,7 +56,19 @@ export const getTicket = (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error });
     }
-  }
+  
+};
+export const getAdminTicket = (req, res) => {  
+  
+    console.log("admin ticket");
+    try {
+      Ticket.find().then((tickets) => {
+        res.status(200).json(tickets);
+      });
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  
 };
 
 export const addTicket = async (req, res) => {
@@ -133,6 +132,20 @@ export const deleteTicket = async (req, res) => {
         res.status(200).json(tickets);
       });
     }
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
+export const deleteCheckTicket = async (req, res) => {
+  const id = req.params.id;
+  console.log("🚀 ~ file: ticket.js ~ line 141 ~ deleteCheckTicket ~ id", id)
+  try {
+    await CheckTicket.findByIdAndRemove(id);    
+    CheckTicket.find().then((tickets) => {
+        res.status(200).json(tickets);
+      });
+   
   } catch (error) {
     res.status(500).json({ error: error });
   }
