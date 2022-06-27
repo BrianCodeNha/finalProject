@@ -23,7 +23,7 @@ function DeleteModalMany({setDeleteList, deleteList, deleteSelectedItem }) {
           <Modal.Title>Xác nhận xoá</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Bạn có chắc chắn muốn xoá vé số được chọn?
+          Bạn có chắc chắn muốn xoá data được chọn?
          
         </Modal.Body>
         <Modal.Footer>

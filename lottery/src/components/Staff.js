@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Loading } from "./Loading";
-import { postStaff } from "../Redux/ActionCreator";
 
 import SearchBar from "./SearchBar";
 //styles
@@ -51,7 +50,7 @@ export default function Staff(props) {
   const staffDetail = paginateStaffs.map((staff) => (
     <div
       key={staff._id}
-      className="outer col-12 col-md-4 col-lg-3 justify-content-center"
+      className="outer col-12 col-md-6 col-lg-4 justify-content-center"
       style={{ padding: "20px" }}
     >
       <div className="item">
@@ -104,6 +103,7 @@ export default function Staff(props) {
       </div>
     </div>
   ));
+  
 
   if (props.isLoading) {
     return <Loading />;
@@ -116,6 +116,7 @@ export default function Staff(props) {
           getSortEntry={(entry) => props.getSortEntry(entry)}
           signal='veso'
           userStatus={props.userStatus}
+          veDoList={props.veDoList}
         />
         <div>
           <section className="pagination d-flex justify-content-center">

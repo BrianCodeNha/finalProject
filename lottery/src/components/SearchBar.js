@@ -21,11 +21,12 @@ const mapStateToProps = (state) => ({
 
 
 export function SearchBar(props) {
-  const [term, setTerm] = useState("");
-  const [option, setOption] = useState("producer"); 
+  const [term, setTerm] = useState(props.term);
+  const [option, setOption] = useState(""); 
 
   const history = useHistory();
   console.log('signal', props.signal);
+  console.log('term', props.term);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,27 +45,45 @@ export function SearchBar(props) {
             <option value={(props.signal === 'veso' || props.signal === 'vedo') ? "date" : 'phone'}>{(props.signal === 'veso' || props.signal === 'vedo') ? "Ngày Xổ số" : 'phone'}</option>
           </select>
         </div>
+        <span>
+        
         <input
           onChange={(e) => setTerm(e.target.value.toLowerCase())}
-          type="text"
+          type={(option === 'date' ) ? 'date' : 'text'}
           id="search"
+          value={term}
+          className="ps-3"
         />
+        {(option === 'date' ) && <button className="btn-primary" type="submit">Lọc</button>}
+        </span>
         
         <div className="sort">
           <label>Sort by </label>
           <select onChange={(e) => props.getSortEntry(e.target.value)}>
+            <option>Chọn</option>
             <option value={(props.signal === 'veso' || props.signal === 'vedo') ? "producer" : 'username'}>{(props.signal === 'veso' || props.signal === 'vedo') ? 'Tên nhà đài' : 'username'}</option>
-            <option value={(props.signal === 'veso' || props.signal === 'vedo') ? "number" : 'email'}>{(props.signal === 'veso' || props.signal === 'vedo') ? 'Số vé số' : 'email'}</option>
+            <option value={props.signal === 'veso' ? "number" : props.signal === 'vedo' ? 'producerId': 'email'}>{props.signal === 'veso' ? "number" : props.signal === 'vedo' ? 'producerId': 'email'}</option>
             <option value={(props.signal === 'veso' || props.signal === 'vedo') ? "date" : 'phone'}>{(props.signal === 'veso' || props.signal === 'vedo') ? 'Ngày xổ số' : 'phone'}</option>
           </select>
         </div>
-        {}
       </form>
+
+      
+      {(props.signal === 'vedo') && <div className="my-3 mx-5">
+        <AddEmployee 
+        postStaff = {props.postStaff}
+        staffList = {props.staffList}
+        userStatus = {props.userStatus}
+        signal= 'vedo'
+        veDoList= {props.veDoList}
+         />
+      </div>}
       {(props.signal === 'veso') && <div className="my-3 mx-5">
         <AddEmployee 
         postStaff = {props.postStaff}
         staffList = {props.staffList}
         userStatus = {props.userStatus}
+        veDoList= {props.veDoList}
          />
       </div>}
       {(props.signal === 'user') && <div className="my-3 mx-5">

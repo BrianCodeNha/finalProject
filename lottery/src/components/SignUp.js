@@ -28,6 +28,8 @@ function SignUp({ userStatus, loadUserStatus }) {
     if (value.email.length === 0) {
       setErrors({ ...errors, email: "Yêu cầu nhập email!!" });
       return setIsSubmit(false);
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value.email)) {
+      return setErrors({ ...errors, email: "Email bạn nhập không hợp lệ" });
     }
 
     if (value.phone.length === 0) {
@@ -100,7 +102,7 @@ function SignUp({ userStatus, loadUserStatus }) {
         <label htmlFor="email" className="row container">
           Email:
           <input
-            type="text"
+            type="email"
             name="email"
             onChange={(e) => setUser({ ...user, email: e.target.value })}
           />

@@ -65,8 +65,9 @@ export default function ManageUsers(props) {
               textAlign: "left",
               padding: "10px",
             }}
+            className='row'
           >
-            <div className="col btn-group">
+            <div className="col-2 btn-group">
               <input
                 onClick={onSelectDelete}
                 disabled={staff.role === "admin" && true}
@@ -75,23 +76,25 @@ export default function ManageUsers(props) {
                 id={staff._id}
                 value={staff._id}
               />
-              <label className="btn btn-outline-danger" htmlFor={staff._id}>
+              <label className="btn btn-outline-danger w-25 py-2 px-1 my-1" htmlFor={staff._id}>
                 chọn
               </label>
 
               <Switch
                 checked={staff.active}
-                onChange={() => props.deactivateUser(staff._id, {active: !staff.active})}
+                onChange={() =>
+                  props.deactivateUser(staff._id, { active: !staff.active })
+                }
                 onColor="#86d3ff"
                 onHandleColor="#2693e6"
-                handleDiameter={30}
+                handleDiameter={15}
                 uncheckedIcon={false}
-                checkedIcon={false}
+                checkedIcon={false}                
                 boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
                 activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
                 height={20}
-                width={48}
-                className="mx-3"
+                width={30}
+                className="me-5 my-2"
               />
 
               <DeleteModal
@@ -101,22 +104,24 @@ export default function ManageUsers(props) {
                 role={staff.role}
               />
             </div>
-            <Link exact="true" to={`/admin/user/${staff._id}`}>
-              <span className="col mx-3">
+            <Link className='col-8' exact="true" to={`/admin/user/${staff._id}`}>
+            <span className='row my-2' >
+              <span className="col-3 ">
                 {" "}
                 <strong>username: </strong> {staff.username}{" "}
               </span>
-              <span className="col mx-3">
+              <span className="col-4 ">
                 {" "}
                 <strong>Email: </strong> {staff.email}{" "}
               </span>
-              <span className="col mx-3">
+              <span className="col-3 ">
                 {" "}
                 <strong>Phone: </strong> {staff.phone}{" "}
               </span>
-              <span className="col mx-3">
+              <span className="col-2 ">
                 {" "}
                 <strong>Role: </strong> {staff.role}{" "}
+              </span>
               </span>
             </Link>
           </div>
@@ -142,6 +147,10 @@ export default function ManageUsers(props) {
         <SearchBar
           getSortEntry={(entry) => props.getSortEntry(entry)}
           signal="user"
+          term={props.term}
+          option={props.option}
+          postStaff={props.postStaff}
+          userStatus={props.userStatus}
         />
         <div>
           <section className="pagination d-flex justify-content-center">

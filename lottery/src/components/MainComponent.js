@@ -18,6 +18,10 @@ import {
   updateUser,
   deactivateUser,
   loadUserStatus,
+  fetchVeDo,
+  deleteVeDo,
+  deleteSelectedVedo,
+  postVedo,
 } from "../Redux/ActionCreator";
 
 import QuanLyVeDo from "./QuanLyVeDo";
@@ -50,33 +54,22 @@ const mapDispatchToProp = (dispatch) => ({
   fetchUsers: () => {
     dispatch(fetchUsers());
   },  
-  postStaff: (
-    id,
-    EmployeeName,
-    doB,
-    startDate,
-    departmentId,
-    salaryScale,
-    annualLeave,
-    overTime,
-    image
-  ) => {
+  fetchVeDo: () => {
+    dispatch(fetchVeDo());
+  },  
+  postStaff: (veso) => {
     dispatch(
-      postStaff(
-        id,
-        EmployeeName,
-        doB,
-        startDate,
-        departmentId,
-        salaryScale,
-        annualLeave,
-        overTime,
-        image
-      )
-    );
+      postStaff(veso));
+  },
+  postVedo: (vedo) => {
+    dispatch(
+      postVedo(vedo));
   },
   deleteEmployee: (id, number, producer) => {
     dispatch(deleteEmployee(id, number, producer));
+  },
+  deleteVeDo: (id, date, producer) => {
+    dispatch(deleteVeDo(id, date, producer));
   },
   deleteUser: (id, userName, email) => {
     dispatch(deleteUser(id, userName, email));
@@ -86,6 +79,9 @@ const mapDispatchToProp = (dispatch) => ({
   },
   deleteSelectedUser: (idList) => {
     dispatch(deleteSelectedUser(idList));
+  },
+  deleteSelectedVedo: (idList) => {
+    dispatch(deleteSelectedVedo(idList));
   },
   updateEmployee: (id, updatedTicket) => {
     dispatch(updateEmployee(id, updatedTicket));
@@ -109,39 +105,46 @@ export function MainComponent({
   isLoading,
   errMess,
   fetchStaffs,  
+  fetchVeDo,
+  veDoList,
+  postStaff,
+  postVedo,
   fetchUsers,  
   updateEmployee,
   updateUser,
   deleteEmployee,
+  deleteVeDo,
   deleteUser,
   deactivateUser,
   deleteSelectedItem,
   deleteSelectedUser,
+  deleteSelectedVedo
 }) {
 
   axios.defaults.withcredentials = true;
   //store stafflist here
-  const [veDoList, setVeDoList] = useState([]);
+  // const [veDoList, setVeDoList] = useState([]);
 
 
   useEffect(() => {
     // insert mapDispatchToProp
 
-    const fetchDataVeDo = async () => {     
+    const fetchLoginInfo = async () => {     
       console.log('getdata Ve Do')
-      const response1 = await axios.get(
-        "http://localhost:5000/admin/checkticket"
-      );
-      setVeDoList(response1.data);    
+      // const response1 = await axios.get(
+      //   "http://localhost:5000/admin/checkticket"
+      // );
+      // setVeDoList(response1.data);    
 
       console.log('getUserStatus')
       const response2 = await axios.get(backEndURL + 'authen/login', {withCredentials: true})
       loadUserStatus(response2.data)     
       
     };
-    fetchDataVeDo();
+    fetchLoginInfo();
+    fetchVeDo();
     fetchStaffs();
-    fetchUsers();
+    userStatus.role === 'admin' && fetchUsers();
   },[userStatus.role] ); // component Did mount
 
   
@@ -165,6 +168,20 @@ export function MainComponent({
     ticketListFromServer.sort(function (a, b) {
       if (entry === "number") {
         return b.number - a.number;
+      } else if (entry === "producer") {        
+        if (a.producer.toLowerCase() > b.producer.toLowerCase()) return 1;
+        else if (a.producer.toLowerCase() < b.producer.toLowerCase()) return -1;
+      } else if (entry === "date") {
+        if (a.date.toLowerCase() > b.date.toLowerCase()) return 1;
+        if (a.date.toLowerCase() < b.date.toLowerCase()) return -1;
+      }      
+      return null
+    });
+
+    veDoList.sort(function (a, b) {
+      if (entry === "producerId") {
+        if (a.producerId.toLowerCase() > b.producerId.toLowerCase()) return 1;
+        else if (a.producerId.toLowerCase() < b.producerId.toLowerCase()) return -1;
       } else if (entry === "producer") {        
         if (a.producer.toLowerCase() > b.producer.toLowerCase()) return 1;
         else if (a.producer.toLowerCase() < b.producer.toLowerCase()) return -1;
@@ -241,7 +258,14 @@ export function MainComponent({
         <Switch>          
 
           <Route exact='true' path="/">
-          <QuanLyVeDo veDoList={veDoList} />
+          <QuanLyVeDo 
+          veDoList={veDoList} 
+          postVedo={postVedo}
+          userStatus={userStatus}
+          getSortEntry={(entry) => sortDataEntry(entry)}
+          deleteEmployee={deleteVeDo}
+          deleteSelectedItem={deleteSelectedVedo}
+          />
           </Route>
           <Route exact='true' path="/login">
           <Login
@@ -259,6 +283,7 @@ export function MainComponent({
           <Route exact='true' path="/veso">
             <Staff
               staffs={ticketListFromServer}
+              veDoList={veDoList}
               onClick={(selectedID) => selectedEmployee(selectedID)}
               getSortEntry={(entry) => sortDataEntry(entry)}
               deleteEmployee={deleteEmployee}
@@ -295,7 +320,7 @@ export function MainComponent({
           <Route exact='true' path="/admin/user/:userId">{userWithId}</Route>
           <Route exact='true' path="/veso/:staffId">{staffWithId}</Route>
           <Route path="/search">
-            <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd}/>
+            <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd} veDoList={veDoList} userStatus={userStatus} />
           </Route>          
           <Redirect to="/" />          
          

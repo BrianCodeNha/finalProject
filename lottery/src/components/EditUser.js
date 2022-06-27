@@ -71,19 +71,17 @@ export function EditUser(props) {
           <div className="col-12 col-md-8 col-lg-9">
             <h3>Username: {props.staff.username}</h3>
             <p>
-              Email: {props.staff.email}
+              <b>Email:</b> {props.staff.email}
               <br />
-              Phone: {props.staff.phone}
+              <b>Phone:</b> {props.staff.phone}
               <br />
-              Role: {props.staff.role}
-              <br />
-              Passwords: <input type="password" value={props.staff.password} editable='false' readOnly={true} />
+              <b>Role:</b> {props.staff.role}              
             </p>
             
             <hr />
             <h3>Cập nhật thông tin USER</h3>
             <form onSubmit={handleSubmit}>
-              <label htmlFor="number" className="row container">
+              <label htmlFor="number" className="row container fw-bold">
                 Username:
                 <input
                   type="text"
@@ -92,7 +90,7 @@ export function EditUser(props) {
                   onChange={(e) => handleChange(e)}
                 />
               </label>
-              <label htmlFor="producer" className="row container">
+              <label htmlFor="producer" className="row container fw-bold">
                 Email:
                 <input
                   type="text"
@@ -101,7 +99,7 @@ export function EditUser(props) {
                   onChange={(e) => handleChange(e)}
                 />
               </label>
-              <label htmlFor="phone" className="row container">
+              <label htmlFor="phone" className="row container fw-bold">
                 Phone:
                 <input
                   type="text"
@@ -117,7 +115,7 @@ export function EditUser(props) {
                   <option>admin</option>
                 </select>
               </label>}             
-              <button type="submit">update</button>
+              <button className='btn btn-warning my-3' type="submit">update</button>
             </form>
           </div>
         </div>

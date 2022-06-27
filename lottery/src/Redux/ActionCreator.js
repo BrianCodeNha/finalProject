@@ -44,6 +44,39 @@ export const postStaff = (newVeSo) => (dispatch) => {
       alert("lỗi thêm vé số số Error: " + err.message);
     });
 };
+export const postVedo = (newVeDo) => (dispatch) => {
+console.log("🚀 ~ file: ActionCreator.js ~ line 48 ~ postVedo ~ newVeDo", newVeDo)
+
+  return axios
+    .post(backEndURL + "admin/checkticket", newVeDo)
+    .then(
+      (response) => {
+        console.log(
+          "🚀 ~ file: ActionCreator.js ~ line 19 ~ response",
+          response.data
+        );
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      dispatch(addVeDo(response.data));
+    })
+    .catch((err) => {
+      console.log("Thêm vé số", err.message);
+      alert("lỗi thêm vé số số Error: " + err.message);
+    });
+};
 
 export const postUser = (newUser) => (dispatch) => {
 console.log("🚀 ~ file: ActionCreator.js ~ line 47 ~ postUser ~ newUser", newUser)
@@ -111,6 +144,36 @@ export const deleteEmployee = (id, number, producer) => (dispatch) => {
     });
 };
 
+export const deleteVeDo = (id, date, producer) => (dispatch) => {
+  return axios
+    .delete(`http://localhost:5000/admin/checkticket/${id}`)
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      alert(`Đã xoá thành công vé dò: đài: ${producer} - xổ ngày: ${date}`);
+      dispatch(addVeDo(response.data));
+    })
+    .catch((err) => {
+      console.log("delete", err.message);
+      alert("delete error: " + err.message);
+    });
+};
+
 export const deleteUser = (id, name , email) => (dispatch) => {
   return axios
     .delete(`http://localhost:5000/admin/user/${id}`)
@@ -166,6 +229,38 @@ export const deleteSelectedItem = (idList) => (dispatch) => {
     .then((response) => {
       alert(`Đã xoá thành công những vé số được chọn`);
       dispatch(addStaff(response.data));
+    })
+    .catch((err) => {
+      console.log("delete", err.message);
+      alert("delete error: " + err.message);
+    });
+};
+
+export const deleteSelectedVedo = (idList) => (dispatch) => {
+  return axios
+    .post(`http://localhost:5000/admin/checkticket/deletemany`, {
+      idList: idList,
+    })
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      alert(`Đã xoá thành công những vé dò được chọn`);
+      dispatch(addVeDo(response.data));
     })
     .catch((err) => {
       console.log("delete", err.message);
@@ -305,7 +400,7 @@ export const deactivateUser = (id, updateActiveProp) => (dispatch) => {
 export const fetchStaffs = () => (dispatch) => {
   dispatch(staffLoading(true));
 
-  return axios.get(`http://localhost:5000/user/ticket`)
+  return axios.get(`http://localhost:5000/user/ticket`, {withCredentials: true})
     .then(
       (response) => {
         if (response.status === 200) {
@@ -383,9 +478,31 @@ export const fetchUserStatus = () => (dispatch) => {
 
 // fetch vedo from server
 
-export const fetchVeDo = (veDoList) => (dispatch) => {
-  dispatch(staffLoading(true));
-  return dispatch(addVeDo(veDoList));
+export const fetchVeDo = () => (dispatch) => {
+  console.log('FetchVeDo')
+  dispatch(staffLoading(true))
+  return axios.get("http://localhost:5000/admin/checkticket")
+  .then(
+    (response) => {
+    console.log("🚀 ~ file: ActionCreator.js ~ line 391 ~ fetchVeDo ~ response", response.data)
+      if (response.status === 200) {
+        return response;
+      } else {
+        var error = new Error(
+          "Error " + response.status + ": " + response.statusText
+        );
+        error.response = response;
+        throw error;
+      }
+    },
+    (error) => {
+      var errmess = new Error(error.message);
+      throw errmess;
+    }
+  )
+  .then((veDoList) => dispatch(addVeDo(veDoList.data)))
+  .catch((error) => dispatch(staffLoadingFailed(error.message)));
+  
 };
 
 export const addVeDo = (veDoList) => ({

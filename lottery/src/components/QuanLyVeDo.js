@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, InputGroup, Modal } from "react-bootstrap";
-import axios from "axios";
 import { FadeTransform } from "react-animation-components";
 import { Link } from "react-router-dom";
-import { fetchVeDo } from "../Redux/ActionCreator";
 import { SearchBar } from "./SearchBar";
+import DeleteModal from "./DeleteModal";
+import DeleteModalMany from "./DeleteModalMany";
 
 function QuanLyVeDo(props) {
+  console.log("🚀 ~ file: QuanLyVeDo.js ~ line 8 ~ QuanLyVeDo ~ props", props)
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -14,9 +15,37 @@ function QuanLyVeDo(props) {
 
   const [producer, setProducer] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [pageSize, setSize] = useState("20");
+  const [pageNumber, setPageNumber] = useState("1");
+
+
+  const [deleteList, setDeleteList] = useState([]);
+  const [newVeDo, setNewVeDo] = useState({});
+  console.log("🚀 ~ file: QuanLyVeDo.js ~ line 24 ~ QuanLyVeDo ~ newVeDo", newVeDo)
+
+  const handleChange = (e) => {
+    const { name, value} = e.target;
+    setNewVeDo({...newVeDo, [name]: value});
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.postVedo(newVeDo)
+
+  }
+
+  const onSelectDelete = (e) => {
+    if (e.target.checked) {
+      return setDeleteList([...deleteList, e.target.value]);
+    } else {
+      return setDeleteList((pre) =>
+        pre.filter((item) => item !== e.target.value)
+      );
+    }
+  };  
 
   const [veDoList, setVeDoList] = useState([]);  
-  console.log("🚀 ~ file: QuanLyVeDo.js ~ line 18 ~ QuanLyVeDo ~ veDoList", veDoList)
+  console.log("🚀 ~ file: QuanLyVeDo.js ~ line 18 ~ QuanLyVeDo ~ veDoList", veDoList)  
 
   // chi tiet ve do
   useEffect(() =>{
@@ -27,7 +56,29 @@ function QuanLyVeDo(props) {
     }
   },[props.veDoList])
 
-  const veDoDetails = veDoList.map((staff) => (
+  const paginate = (array, pageSize, pageNumber) => {
+    return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
+  };
+
+  const paginateVeDoList = paginate(veDoList, pageSize, pageNumber);
+
+
+  const numberOfPage =
+    Math.floor(veDoList.length / (pageSize * 1)) +
+    (veDoList.length % (pageSize * 1) > 0 ? 1 : 0);
+
+  const numberArr = (n) => {
+      let arr = [];
+      while (n > 0) {
+        arr.push(n);
+        n = n - 1;
+      }
+      return arr.reverse();
+    };
+
+  const pages = numberArr(numberOfPage);
+
+  const veDoDetails = paginateVeDoList.map((staff) => (
     <div
       key={staff._id}
       className="outer col-12 col-md-12 col-lg-6 justify-content-center"
@@ -40,7 +91,7 @@ function QuanLyVeDo(props) {
             exitTransform: "scale(0.5) translateY(-50%)",
           }}
         >
-          <Link exact='true' to={`/vedo/${staff._id}`}>
+          <Link exact='true' to={`/${props.userStatus.role === 'admin' ? ('vedo/' + staff._id) : '#' }`}>
             <div
               style={{
                 backgroundColor: "#EBEBEB",
@@ -110,21 +161,36 @@ function QuanLyVeDo(props) {
                 </div>
                 <div className="col-8">{staff.prize.rewardNumbers.giaiTam}</div>
               </div>
-
-
-
-
             </div>
           </Link>
         </FadeTransform>
         <div className="row">
-          <button
-            onClick={() => props.deleteEmployee(staff._id)}
+          <div
+            className="btn-group"
+            role="group"
+            aria-label="Basic checkbox toggle button group"
+          >
+            <input
+              onClick={onSelectDelete}
+              type="checkbox"
+              className="btn-check"
+              id={staff._id}
+              value={staff._id}
+            />
+            <label className="btn btn-outline-danger" htmlFor={staff._id}>
+              Select
+            </label>
+            <DeleteModal staff={staff} deleteEmployee={props.deleteEmployee} signal='vedo' />
+          </div>
+        </div>
+        {/*<div className="row">
+          {props.userStatus.role === 'admin' && <button
+            onClick={() => props.deleteEmployee(staff._id, staff.date, staff.producer)}
             className="col info"
           >
             Delete
-          </button>
-        </div>
+          </button>}
+            </div>*/}
       </div>
     </div>
   ));
@@ -145,7 +211,9 @@ function QuanLyVeDo(props) {
             Quản Lý Thông Tin Vé Dò
           </span>{" "}
           <br />
-          <Button variant="primary" onClick={handleShow}>
+
+      {props.userStatus.role === "admin" && <>
+            <Button variant="primary" onClick={handleShow}>
             Thêm Thông tin vé dò
           </Button>
           <Modal show={show} onHide={handleClose}>
@@ -153,15 +221,16 @@ function QuanLyVeDo(props) {
               <Modal.Title>Thêm Vé Dò Mới</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <form
-                action="http://localhost:5000/admin/checkticket"
-                method="post"
+              <form onSubmit={handleSubmit}              
               >
                 <label htmlFor="producer" className="row container">
                   Đài xổ số:
                   <select
                     name="producer"
-                    onChange={(e) => setProducer(e.target.value)}
+                    onChange={(e) => {
+                      handleChange(e);
+                      setProducer(e.target.value)
+                    }}
                   >
                     <option>Chọn nhà đài xổ số</option>
                     <option>An Giang</option>
@@ -170,34 +239,13 @@ function QuanLyVeDo(props) {
                     <option>Bình Thuận</option>
                     <option>Tây Ninh</option>
                   </select>
-                </label>
-                <label htmlFor="producerId" className="row container">
-                  Mã Đài xổ số:
-                  <input
-                    type="text"
-                    editable="false"
-                    name="producerId"
-                    value={
-                      producer === "An Giang"
-                        ? "XSAG - AG-6K2"
-                        : producer === "Tây Ninh"
-                        ? "XSTN - 6K2"
-                        : producer === "Bình Thuận"
-                        ? "XSBTH - 6K2"
-                        : producer === "Vĩnh Long"
-                        ? "XSVL - 43VL23"
-                        : producer === "Bình Dương"
-                        ? "XSBD - 06K23"
-                        : "vui lòng chọn đài xổ số"
-                    }
-                  />
-                </label>
+                </label>                
                 <label htmlFor="date" className="row container">
                   Ngày xổ số:
-                  <input type="date" name="date" />
+                  <input type="date" name="date" onChange={handleChange}/>
                 </label>
                 <label htmlFor="giaiDB" className="row container">
-                  Các Số trúsng giải thưởng:
+                  Các Số trúng giải thưởng:
                   <input
                     placeholder="giải đặc biệt"
                     type="text"
@@ -205,6 +253,7 @@ function QuanLyVeDo(props) {
                     id="giaiDB"
                     maxlength={6}
                     margin="2px"
+                    onChange={handleChange}
                   />
                   <input
                     placeholder="giải nhất"
@@ -213,6 +262,7 @@ function QuanLyVeDo(props) {
                     id="giaiNhat"
                     maxlength={5}
                     margin="2px"
+                    onChange={handleChange}
                   />
                   <input
                     placeholder="giải nhì"
@@ -221,6 +271,7 @@ function QuanLyVeDo(props) {
                     id="giaiNhi"
                     maxlength={5}
                     margin="2px"
+                    onChange={handleChange}
                   />
                   <InputGroup style={{ padding: "10px" }}>
                     <input
@@ -229,6 +280,7 @@ function QuanLyVeDo(props) {
                       name="giaiBa1"
                       id="giaiBa1"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải ba 2"
@@ -236,6 +288,7 @@ function QuanLyVeDo(props) {
                       name="giaiBa2"
                       id="giaiBa2"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                   </InputGroup>
                   <InputGroup style={{ padding: "10px" }}>
@@ -245,6 +298,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu1"
                       id="giaiTu1"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải tư 2"
@@ -252,6 +306,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu2"
                       id="giaiTu2"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                   </InputGroup>
                   <InputGroup style={{ padding: "10px" }}>
@@ -261,6 +316,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu3"
                       id="giaiTu3"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải tư 4"
@@ -268,6 +324,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu4"
                       id="giaiTu4"
                       maxlength={5}
+                      onChange={handleChange}
                     />
 
                     <input
@@ -276,6 +333,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu5"
                       id="giaiTu5"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải tư 6"
@@ -283,6 +341,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu6"
                       id="giaiTu6"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải tư 7"
@@ -290,6 +349,7 @@ function QuanLyVeDo(props) {
                       name="giaiTu7"
                       id="giaiTu7"
                       maxlength={5}
+                      onChange={handleChange}
                     />
                   </InputGroup>
                   <InputGroup style={{ padding: "10px" }}></InputGroup>
@@ -299,6 +359,7 @@ function QuanLyVeDo(props) {
                     name="giaiNam"
                     id="giaiNam"
                     maxlength={4}
+                    onChange={handleChange}
                   />
                   <InputGroup style={{ padding: "10px" }}>
                     <input
@@ -307,6 +368,7 @@ function QuanLyVeDo(props) {
                       name="giaiSau1"
                       id="giaiSau1"
                       maxlength={4}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải sáu 2"
@@ -314,6 +376,7 @@ function QuanLyVeDo(props) {
                       name="giaiSau2"
                       id="giaiSau2"
                       maxlength={4}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải sáu 3"
@@ -321,6 +384,7 @@ function QuanLyVeDo(props) {
                       name="giaiSau3"
                       id="giaiSau3"
                       maxlength={4}
+                      onChange={handleChange}
                     />
                   </InputGroup>
                   <InputGroup style={{ padding: "10px" }}>
@@ -330,6 +394,7 @@ function QuanLyVeDo(props) {
                       name="giaiBay"
                       id="giaiBay"
                       maxlength={3}
+                      onChange={handleChange}
                     />
                     <input
                       placeholder="giải tám"
@@ -337,6 +402,7 @@ function QuanLyVeDo(props) {
                       name="giaiTam"
                       id="giaiTam"
                       maxlength={2}
+                      onChange={handleChange}
                     />
                   </InputGroup>
                 </label>
@@ -352,13 +418,49 @@ function QuanLyVeDo(props) {
               </Button>
             </Modal.Footer>
           </Modal>
+          </>
+          }
         </div>
       </div>
       <SearchBar
       getSortEntry={(entry) => props.getSortEntry(entry)}
-      
+      term={props.term}
+      option={props.option}
+      postStaff={props.postStaff}
       signal='vedo'
+      userStatus={props.userStatus}
+      veDoList = {veDoList}
     />
+    <section className="pagination d-flex justify-content-center">
+    {pages.map((page) => (
+      <button
+        key={page}
+        onClick={() => setPageNumber(page)}
+        className="mx-2"
+      >
+        {page}
+      </button>
+    ))}
+
+    <form action="#">
+      <div className="input-group">
+        <select onChange={(e) => setSize(e.target.value)}>
+          <option>20</option>
+          <option>10</option>
+          <option>5</option>
+        </select>
+        <button type="submit">select</button>
+      </div>
+    </form>
+    {deleteList.length > 0 && (
+      <DeleteModalMany
+        setDeleteList={setDeleteList}
+        deleteList={deleteList}
+        deleteSelectedItem={props.deleteSelectedItem}
+        
+      />
+    )}
+  </section>
       <div className="row cod-flex p-2">{veDoDetails}</div>
     </div>
   );

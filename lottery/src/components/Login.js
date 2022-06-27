@@ -20,6 +20,8 @@ function Login({ userStatus, loadUserStatus }) {
   const validate = (value) => {
     if (value.email.length === 0) {
       return setErrors({ ...errors, email: "Yêu cầu nhập email!!" });
+    } else if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value.email)) {
+      return setErrors({ ...errors, email: "Email bạn nhập không hợp lệ" });
     }
 
     if (value.password.length === 0) {

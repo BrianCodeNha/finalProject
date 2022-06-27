@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { STAFFS } from "../shared/staffs";
 import ManageUsers from "./ManageUser";
+import QuanLyVeDo from "./QuanLyVeDo";
 import Staff from "./Staff";
 
-export default function SearchPage({staffs, users}) {
+export default function SearchPage({staffs, users, veDoList, userStatus}) {
   //url = /search?q=van
   const queryString = useLocation().search; //object contain property search: ?q=van
   const queryParams = new URLSearchParams(queryString); // chuyển thành object urlsearchparams
@@ -34,6 +35,24 @@ export default function SearchPage({staffs, users}) {
       onClick={(selectedID) => selectedEmployee(selectedID)}
     />
   );}
+  
+  if (signal === 'vedo') {return (    
+    <QuanLyVeDo
+    veDoList={veDoList.filter(
+        (vedo) =>
+          (option === "producer"
+            ? vedo.producer + ""
+            : option === "number"
+            ? vedo.number + ""
+            : vedo.date
+          ).toLowerCase().indexOf(term) !== -1
+      )}      
+      term={term}
+      option={option}
+      userStatus={userStatus}
+      onClick={(selectedID) => selectedEmployee(selectedID)}
+    />
+  );}
 
   if (signal === 'user') {return (    
     <ManageUsers
@@ -46,7 +65,9 @@ export default function SearchPage({staffs, users}) {
             : staff.email
           ).toLowerCase().indexOf(term) !== -1
       )}      
-
+      term={term}
+      option={option}
+      userStatus={userStatus}
       onClick={(selectedID) => selectedEmployee(selectedID)}
     />
   );}

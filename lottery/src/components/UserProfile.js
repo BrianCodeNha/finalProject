@@ -46,8 +46,9 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
     const mediumPassword = new RegExp('((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))')
     const checkPassword = (password) => {
       if(mediumPassword.test(password)) {
-        setIsMedium(true)
+        return setIsMedium(true)
       }
+      return setIsMedium(false)
     };
 
     if (isLoading) {
@@ -70,13 +71,7 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
       console.log(
         "🚀 ~ file: UserProfile.js ~ line 52 ~ EmployeeDetail ~ user",
         user
-      );
-
-      const handleSubmitUser = (e) => {
-        e.preventDefault();
-        console.log(updatedUser);
-        updateUser(updatedUser.id, updatedUser);
-      };
+      );     
       
       const handleChangePassword = (e) => {
         e.preventDefault();
@@ -95,10 +90,7 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
         }
       };
 
-      const handleChange = (e) => {
-        const { name, value } = e.target;
-        return setUpdatedUser({ ...updatedUser, [name]: value });
-      };
+      
 
       return (
         <div className="staff row container">
@@ -110,13 +102,11 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
           </MDBBreadcrumb>
           <div className="col-12 col-md-4 col-lg-3"></div>
           <div className="col-12 col-md-8 col-lg-9">
-            <h3>Thông Tin User</h3>
-            <p>Username: {user.username}</p>
+            <h3>Thông Tin User</h3>            
             <p>
-              Email: {user.email}
-              <br />
-              Phone: {user.phone}
-              <br />
+              <b>Username</b>: {user.username} <br />
+              <b>Email</b>: {user.email} <br />
+              <b>Phone</b>: {user.phone} <br />
             </p>
             <hr />
            { /*<h3>Cập nhật thông tin user</h3>
@@ -176,7 +166,7 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
               </label>
               {newPassword.length > 0 && (isMedium ? <div className="text-success ">Độ Mạnh Trung Bình</div> : <div className="text-danger">Độ Mạnh Yếu</div>) }
               <label htmlFor="cfPassword" className="row container">
-                Xác nhận Passwordi:
+                Xác nhận Password:
                 <input
                   type="password"
                   name="cfPassword"
@@ -185,7 +175,7 @@ export function UserProfile({ isLoading, errorMess, updateUser }) {
                 />
               </label>
               {cfPassword.length !== 0 && (newPassword === cfPassword ? <div className="text-success">Trùng khớp</div> : <div className="text-danger">Chưa trùng khớp</div>)}
-              <button type="submit">Change Password</button>
+              <button className='my-3 btn btn-warning' type="submit">Change Password</button>
             </form>
             <h4>Độ mạnh của mật khẩu</h4>
             <ul>
