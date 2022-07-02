@@ -1,12 +1,15 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const option = {
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
-        user: 'nmchi1990@gmail.com',
-        pass: 'gvsbcfmutpobyhhi'
+        user: process.env.EmailAddress,
+        pass: process.env.EmailPassword
     }
 }
 

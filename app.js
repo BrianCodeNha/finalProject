@@ -24,14 +24,16 @@ import cookieParser from 'cookie-parser';
 import { checkAuthentication } from './controller/authenticatedUser.js';
 import { User } from './model/User.js';
 import { verifyConnectEmail } from './ulti/mail.js';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 // databaseURI
-const MONGODB_URI =
-  "mongodb+srv://BrianNguyen:097359@cluster0.c8rh7.mongodb.net/lottery";
+const MONGODB_URI = process.env.DATABASE_URL;
 
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 7000;
 
 // all request will go through the below middleware because no route isplaced before them forEx app.use('/', cors) -> only use cors for req to /
 

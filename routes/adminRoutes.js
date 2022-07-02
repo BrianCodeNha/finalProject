@@ -19,6 +19,8 @@ router.post('/user', verifyAdmin, addUser);
 
 router.put('/user/:id', verifyAdmin, updateUser);
 
+router.put('/checkticket/:id', verifyAdmin, updateUser);
+
 router.patch('/user/:id', verifyAdmin, deactivateUser);
 
 router.post('/user/deletemany', verifyAdmin, deleteManyUsers);
