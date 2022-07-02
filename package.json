@@ -24,5 +24,8 @@
     "mongoose": "^6.3.5",
     "nodemailer": "^6.7.5",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.18"
   }
 }
