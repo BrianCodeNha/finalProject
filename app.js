@@ -49,7 +49,7 @@ app.set('view engine', 'ejs')
 app.set('views', './views')
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['https://ephemeral-palmier-d4920f.netlify.app/'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 }))
