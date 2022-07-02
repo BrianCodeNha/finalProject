@@ -48,8 +48,7 @@ const store = new MongoDBStore({
 app.set('view engine', 'ejs')
 app.set('views', './views')
 
-app.use(cors({
-  origin: ['https://ephemeral-palmier-d4920f.netlify.app/'],
+app.use(cors({  
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
 }))
