@@ -48,11 +48,7 @@ const store = new MongoDBStore({
 app.set('view engine', 'ejs')
 app.set('views', './views')
 
-app.use(cors({
-  origin: ['https://ephemeral-palmier-d4920f.netlify.app'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  credentials: true,
-}))
+app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
