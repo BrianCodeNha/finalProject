@@ -67,7 +67,8 @@ export default function ManageUsers(props) {
             }}
             className='row'
           >
-            <div className="col-2 btn-group">
+            <div className="col-2 btn-group mx-3">
+            <div>
               <input
                 onClick={onSelectDelete}
                 disabled={staff.role === "admin" && true}
@@ -76,9 +77,10 @@ export default function ManageUsers(props) {
                 id={staff._id}
                 value={staff._id}
               />
-              <label className="btn btn-outline-danger w-25 py-2 px-1 my-1" htmlFor={staff._id}>
+              <label className="btn btn-outline-danger py-2 px-1 my-2" htmlFor={staff._id}>
                 chọn
               </label>
+              </div>
 
               <Switch
                 checked={staff.active}
@@ -94,9 +96,9 @@ export default function ManageUsers(props) {
                 activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
                 height={20}
                 width={30}
-                className="me-5 my-2"
+                className="me-2 my-3"
               />
-
+            
               <DeleteModal
                 staff={staff}
                 deleteEmployee={props.deleteEmployee}

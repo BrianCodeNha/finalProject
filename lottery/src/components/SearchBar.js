@@ -3,12 +3,15 @@ import { useHistory } from "react-router-dom";
 import "./SearchBar.css";
 import AddEmployee from "./Modal";
 import { connect } from "react-redux";
-import { postStaff, postUser} from '../Redux/ActionCreator'
+import { postStaff, postUser, postStaffAdmin} from '../Redux/ActionCreator'
 import AddUser from "./AddUser";
 
 const mapDispatchToProp = (dispatch) => ({
     postStaff: (newVeSo) => {
       dispatch(postStaff(newVeSo));
+    },
+    postStaffAdmin: (newVeSo) => {
+      dispatch(postStaffAdmin(newVeSo));
     },
     postUser: (newVeSo) => {
       dispatch(postUser(newVeSo));
@@ -72,6 +75,7 @@ export function SearchBar(props) {
       {(props.signal === 'vedo') && <div className="my-3 mx-5">
         <AddEmployee 
         postStaff = {props.postStaff}
+        postStaffAdmin = {props.postStaffAdmin}
         staffList = {props.staffList}
         userStatus = {props.userStatus}
         signal= 'vedo'
@@ -81,6 +85,7 @@ export function SearchBar(props) {
       {(props.signal === 'veso') && <div className="my-3 mx-5">
         <AddEmployee 
         postStaff = {props.postStaff}
+        postStaffAdmin = {props.postStaffAdmin}
         staffList = {props.staffList}
         userStatus = {props.userStatus}
         veDoList= {props.veDoList}

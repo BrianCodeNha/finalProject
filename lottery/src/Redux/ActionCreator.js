@@ -44,6 +44,41 @@ export const postStaff = (newVeSo) => (dispatch) => {
       alert("lỗi thêm vé số số Error: " + err.message);
     });
 };
+
+export const postStaffAdmin = (newVeSo) => (dispatch) => {
+  console.log("🚀 ~ file: ActionCreator.js ~ line 13 ~ newVeSo", newVeSo);
+
+  return axios
+    .post(backEndURL + "admin/ticket", newVeSo)
+    .then(
+      (response) => {
+        console.log(
+          "🚀 ~ file: ActionCreator.js ~ line 19 ~ response",
+          response.data
+        );
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((response) => {
+      dispatch(addStaff(response.data));
+    })
+    .catch((err) => {
+      console.log("Thêm vé số", err.message);
+      alert("lỗi thêm vé số số Error: " + err.message);
+    });
+};
+
 export const postVedo = (newVeDo) => (dispatch) => {
 console.log("🚀 ~ file: ActionCreator.js ~ line 48 ~ postVedo ~ newVeDo", newVeDo)
 
@@ -116,7 +151,7 @@ console.log("🚀 ~ file: ActionCreator.js ~ line 47 ~ postUser ~ newUser", newU
 
 export const deleteEmployee = (id, number, producer) => (dispatch) => {
   return axios
-    .delete(`http://localhost:5000/user/ticket/${id}`)
+    .delete(`${backEndURL}user/ticket/${id}`)
     .then(
       (response) => {
         console.log(response);
@@ -146,7 +181,7 @@ export const deleteEmployee = (id, number, producer) => (dispatch) => {
 
 export const deleteVeDo = (id, date, producer) => (dispatch) => {
   return axios
-    .delete(`http://localhost:5000/admin/checkticket/${id}`)
+    .delete(`${backEndURL}admin/checkticket/${id}`)
     .then(
       (response) => {
         console.log(response);
@@ -176,7 +211,7 @@ export const deleteVeDo = (id, date, producer) => (dispatch) => {
 
 export const deleteUser = (id, name , email) => (dispatch) => {
   return axios
-    .delete(`http://localhost:5000/admin/user/${id}`)
+    .delete(`${backEndURL}admin/user/${id}`)
     .then(
       (response) => {
         console.log(response);
@@ -206,7 +241,7 @@ export const deleteUser = (id, name , email) => (dispatch) => {
 
 export const deleteSelectedItem = (idList) => (dispatch) => {
   return axios
-    .post(`http://localhost:5000/user/ticket/deletemany`, {
+    .post(`${backEndURL}user/ticket/deletemany`, {
       idList: idList,
     })
     .then(
@@ -238,7 +273,7 @@ export const deleteSelectedItem = (idList) => (dispatch) => {
 
 export const deleteSelectedVedo = (idList) => (dispatch) => {
   return axios
-    .post(`http://localhost:5000/admin/checkticket/deletemany`, {
+    .post(`${backEndURL}admin/checkticket/deletemany`, {
       idList: idList,
     })
     .then(
@@ -270,7 +305,7 @@ export const deleteSelectedVedo = (idList) => (dispatch) => {
 
 export const deleteSelectedUser = (idList) => (dispatch) => {
   return axios
-    .post(`http://localhost:5000/admin/user/deletemany`, {
+    .post(`${backEndURL}admin/user/deletemany`, {
       idList: idList,
     })
     .then(
@@ -325,6 +360,35 @@ export const updateEmployee = (id, updatedTicket) => (dispatch) => {
     .then((data) => {
       alert(`Đã cập nhật thành công thông tin vé số`);
       dispatch(addStaff(data.data));
+    })
+    .catch((err) => {
+      console.log("updatedEmployee", err.message);
+      alert("updatedEmployee error: " + err.message);
+    });
+};
+export const updateVeDo = (id, updatedVeDo) => (dispatch) => {
+  axios
+    .put(backEndURL + `admin/checkticket/${id}`, updatedVeDo)
+    .then(
+      (response) => {
+        console.log(response);
+        if (response.statusText === "OK") {
+          return response;
+        } else {
+          var err = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          err.response = response;
+          throw err;
+        }
+      },
+      (err) => {
+        throw err;
+      }
+    )
+    .then((data) => {
+      alert(`Đã cập nhật thành công thông tin vé dò`);
+      dispatch(addVeDo(data.data));
     })
     .catch((err) => {
       console.log("updatedEmployee", err.message);
@@ -400,7 +464,32 @@ export const deactivateUser = (id, updateActiveProp) => (dispatch) => {
 export const fetchStaffs = () => (dispatch) => {
   dispatch(staffLoading(true));
 
-  return axios.get(`http://localhost:5000/user/ticket`, {withCredentials: true})
+  return axios.get(`${backEndURL}user/ticket`, {withCredentials: true})
+    .then(
+      (response) => {
+        if (response.status === 200) {
+          return response;
+        } else {
+          var error = new Error(
+            "Error " + response.status + ": " + response.statusText
+          );
+          error.response = response;
+          throw error;
+        }
+      },
+      (error) => {
+        var errmess = new Error(error.message);
+        throw errmess;
+      }
+    )
+    .then((staff) => dispatch(addStaff(staff.data)))
+    .catch((error) => dispatch(staffLoadingFailed(error.message)));
+};
+
+export const fetchStaffsAdmin = () => (dispatch) => {
+  dispatch(staffLoading(true));
+
+  return axios.get(`${backEndURL}admin/ticket`, {withCredentials: true})
     .then(
       (response) => {
         if (response.status === 200) {
@@ -425,7 +514,7 @@ export const fetchStaffs = () => (dispatch) => {
 export const fetchUsers = () => (dispatch) => {
   dispatch(staffLoading(true));
 console.log('fetch user')
-  return axios.get("http://localhost:5000/admin/user")
+  return axios.get("${backEndURL}admin/user")
     .then(
       (response) => {
       console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response", response.data)
@@ -452,7 +541,7 @@ console.log('fetch user')
 export const fetchUserStatus = () => (dispatch) => {
   dispatch(staffLoading(true));
 
-  return axios.get("http://localhost:5000/")
+  return axios.get(`${backEndURL}`)
     .then(
       (response) => {
       console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response.data", response.data)
@@ -481,7 +570,7 @@ export const fetchUserStatus = () => (dispatch) => {
 export const fetchVeDo = () => (dispatch) => {
   console.log('FetchVeDo')
   dispatch(staffLoading(true))
-  return axios.get("http://localhost:5000/admin/checkticket")
+  return axios.get(`${backEndURL}admin/checkticket`)
   .then(
     (response) => {
     console.log("🚀 ~ file: ActionCreator.js ~ line 391 ~ fetchVeDo ~ response", response.data)

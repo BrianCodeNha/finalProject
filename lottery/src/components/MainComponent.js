@@ -8,7 +8,9 @@ import Staff from "./Staff";
 import { connect } from "react-redux";
 import {  
   fetchStaffs,
+  fetchStaffsAdmin,
   postStaff,
+  postStaffAdmin,
   deleteEmployee,
   deleteSelectedItem,
   updateEmployee,
@@ -22,6 +24,7 @@ import {
   deleteVeDo,
   deleteSelectedVedo,
   postVedo,
+  updateVeDo,
 } from "../Redux/ActionCreator";
 
 import QuanLyVeDo from "./QuanLyVeDo";
@@ -51,6 +54,9 @@ const mapDispatchToProp = (dispatch) => ({
   fetchStaffs: () => {
     dispatch(fetchStaffs());
   },  
+  fetchStaffsAdmin: () => {
+    dispatch(fetchStaffsAdmin());
+  },  
   fetchUsers: () => {
     dispatch(fetchUsers());
   },  
@@ -60,6 +66,10 @@ const mapDispatchToProp = (dispatch) => ({
   postStaff: (veso) => {
     dispatch(
       postStaff(veso));
+  },
+  postStaffAdmin: (veso) => {
+    dispatch(
+      postStaffAdmin(veso));
   },
   postVedo: (vedo) => {
     dispatch(
@@ -86,6 +96,9 @@ const mapDispatchToProp = (dispatch) => ({
   updateEmployee: (id, updatedTicket) => {
     dispatch(updateEmployee(id, updatedTicket));
   },
+  updateVeDo: (id, updatedTicket) => {
+    dispatch(updateVeDo(id, updatedTicket));
+  },
   updateUser: (id, updatedTicket) => {
     dispatch(updateUser(id, updatedTicket));
   },
@@ -105,12 +118,15 @@ export function MainComponent({
   isLoading,
   errMess,
   fetchStaffs,  
+  fetchStaffsAdmin,
   fetchVeDo,
   veDoList,
   postStaff,
+  postStaffAdmin,
   postVedo,
   fetchUsers,  
   updateEmployee,
+  updateVeDo,
   updateUser,
   deleteEmployee,
   deleteVeDo,
@@ -143,7 +159,8 @@ export function MainComponent({
     };
     fetchLoginInfo();
     fetchVeDo();
-    fetchStaffs();
+    userStatus.role === 'user' && fetchStaffs();
+    userStatus.role === 'admin' && fetchStaffsAdmin();
     userStatus.role === 'admin' && fetchUsers();
   },[userStatus.role] ); // component Did mount
 
@@ -233,6 +250,7 @@ export function MainComponent({
       }
       isLoading={isLoading}
       errMess={errMess}
+      updateVeDo={updateVeDo}
     />
   );
   

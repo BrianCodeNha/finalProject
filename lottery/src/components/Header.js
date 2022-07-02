@@ -1,17 +1,20 @@
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 //style
 import "./Header.css";
 import axios from "axios";
+import { backEndURL } from "../shared/baseUrl";
 
 export default function Header({ userStatus, loadUserStatus }) {
   const history = useHistory();
+  const location  = useLocation();
+  const url = location.pathname
 
   const logout = () => {
     console.log("logout");
-    axios.get("http://localhost:5000/authen/logout").then(async (response) => {
+    axios.get(`${backEndURL}authen/logout`).then(async (response) => {
       await loadUserStatus(response.data);
       alert("Đăng xuất thành công");
       return history.push("/");
@@ -31,7 +34,7 @@ export default function Header({ userStatus, loadUserStatus }) {
             to="/"
             style={{
               borderRadius: 25,
-              backgroundColor: "#FEFEFE",
+              backgroundColor: url === "/" ? 'ButtonHighlight' : "#FEFEFE",
               paddingLeft: "10px",
               paddingRight: "10px",
             }}
@@ -44,10 +47,10 @@ export default function Header({ userStatus, loadUserStatus }) {
                 to="/veso"
                 style={{
                   borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
+                  backgroundColor: url === "/veso" ? 'ButtonHighlight' : "#FEFEFE",
                   paddingLeft: "10px",
                   paddingRight: "10px",
-                }}
+                }}                
               >
                 <i className="fa fa-money-check"></i> Quản Lý Vé Số
               </NavLink>
@@ -57,7 +60,7 @@ export default function Header({ userStatus, loadUserStatus }) {
                   to="/admin/user"
                   style={{
                     borderRadius: 25,
-                    backgroundColor: "#FEFEFE",
+                    backgroundColor: url === "/admin/user" ? 'ButtonHighlight' : "#FEFEFE",                    
                     paddingLeft: "10px",
                     paddingRight: "10px",
                   }}
@@ -75,7 +78,7 @@ export default function Header({ userStatus, loadUserStatus }) {
                 to="/userprofile"
                 style={{
                   borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
+                  backgroundColor: url === "/userprofile" ? 'ButtonHighlight' : "#FEFEFE",                  
                   paddingLeft: "10px",
                   paddingRight: "10px",
                 }}
@@ -87,7 +90,7 @@ export default function Header({ userStatus, loadUserStatus }) {
                 to="#"
                 style={{
                   borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
+                  backgroundColor: 'ButtonShadow',
                   paddingLeft: "10px",
                   paddingRight: "10px",
                 }}
@@ -102,7 +105,7 @@ export default function Header({ userStatus, loadUserStatus }) {
                 to="/signup"
                 style={{
                   borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
+                  backgroundColor: url === "/admin/user" ? 'ButtonHighlight' : "#FEFEFE",
                   paddingLeft: "10px",
                   paddingRight: "10px",
                 }}
@@ -114,7 +117,7 @@ export default function Header({ userStatus, loadUserStatus }) {
                 to="/login"
                 style={{
                   borderRadius: 25,
-                  backgroundColor: "#FEFEFE",
+                  backgroundColor: url === "/admin/user" ? 'ButtonHighlight' : "#FEFEFE",
                   paddingLeft: "10px",
                   paddingRight: "10px",
                 }}

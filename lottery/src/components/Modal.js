@@ -23,7 +23,6 @@ export default function AddEmployee(props) {
   const veDoList = props.veDoList;
 
   const [newVeSo, setNewVeSo] = useState(initialState);
-  const [crVeDo, setCrVeDo] = useState(null);
 
   const [isSubmit, SetIsSubmit] = useState(false);
   const [formErrors, setFormErrors] = useState({ name: "" });
@@ -206,7 +205,8 @@ export default function AddEmployee(props) {
         "🚀 ~ file: Modal.js ~ line 70 ~ handleSubmit ~ newVeSo",
         newVeSo
       );
-      props.postStaff(newVeSo);
+      props.userStatus === 'user' && props.postStaff(newVeSo);
+      props.userStatus === 'admin' && props.postStaffAdmin(newVeSo);
       setNewVeSo(initialState);
     }
   };

@@ -15,6 +15,31 @@ const mapDispatchToProps = (dispatch) => ({
 export function VeDoEdit(props) { //truyền data fetch từ server truyền vào props     
 
   const EmployeeDetail = () => {
+    const [updateVeDo, setUpdateVedo] = useState({
+      id: props.staff._id,
+      date: props.staff.date,
+      producer: props.staff.producer,
+      producerId: props.staff.producerId,
+      giaiBa1: props.staff.prize.rewardNumbers.giaiBa.giaiBa1,
+      giaiBa2: props.staff.prize.rewardNumbers.giaiBa.giaiBa2,
+      giaiBay: props.staff.prize.rewardNumbers.giaiBay,
+      giaiDB: props.staff.prize.rewardNumbers.giaiDB,
+      giaiNam: props.staff.prize.rewardNumbers.giaiNam,
+      giaiNhat: props.staff.prize.rewardNumbers.giaiNhat,
+      giaiNhi: props.staff.prize.rewardNumbers.giaiNhi,
+      giaiSau1: props.staff.prize.rewardNumbers.giaiSau.giaiSau1,
+      giaiSau2: props.staff.prize.rewardNumbers.giaiSau.giaiSau2,
+      giaiSau3: props.staff.prize.rewardNumbers.giaiSau.giaiSau3,
+      giaiTam: props.staff.prize.rewardNumbers.giaiTam,
+      giaiTu1: props.staff.prize.rewardNumbers.giaiTu.giaiTu1,
+      giaiTu2: props.staff.prize.rewardNumbers.giaiTu.giaiTu2,
+      giaiTu3: props.staff.prize.rewardNumbers.giaiTu.giaiTu3,
+      giaiTu4: props.staff.prize.rewardNumbers.giaiTu.giaiTu4,
+      giaiTu5: props.staff.prize.rewardNumbers.giaiTu.giaiTu5,
+      giaiTu6: props.staff.prize.rewardNumbers.giaiTu.giaiTu6,
+      giaiTu7: props.staff.prize.rewardNumbers.giaiTu.giaiTu7,
+    });
+    console.log("🚀 ~ file: VeDoEdit.js ~ line 19 ~ EmployeeDetail ~ updateVedo", updateVeDo)
 
     if (props.isLoading){
       return (
@@ -33,25 +58,17 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
         </div>
       )
     }else if (props.staff != null){     
-    console.log("🚀 ~ file: VeDoEdit.js ~ line 35 ~ EmployeeDetail ~ props.staff", props.staff)
-
-      let updateVeDo = {
-        id: props.staff._id,
-        name: props.staff.producer,
-        date: props.staff.date,
-        
-      }
-
+    console.log("🚀 ~ file: VeDoEdit.js ~ line 35 ~ EmployeeDetail ~ props.staff", props.staff)    
 
       const handleSubmit = (e) => {
         e.preventDefault();
         console.log(updateVeDo)
-      //  props.updateEmployee(updateVeDo.id, updateVeDo);
+       props.updateVeDo(updateVeDo.id, updateVeDo);
       }
       
       const handleChange = (e) => {
         const {name, value} = e.target;
-       return updateVeDo = {...updateVeDo,[name]: value}       
+       return setUpdateVedo({...updateVeDo,[name]: value}) 
       }
  
       return (
@@ -73,70 +90,77 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
           <h3>KẾT QUẢ XỔ SỐ: {props.staff.result}</h3>
           <hr/>
            <h3>Cập nhật thông tin vé số</h3>
-           <form className='p-2'>           
+           <form className='p-2' onSubmit={handleSubmit}>           
            <label htmlFor="producer" className="row container">Đài xổ số: 
-           <input type='text' name='producer' value={props.staff.producer}  onChange={(e) => handleChange(e)} />
-           </label>
-           <label htmlFor="producerId" className="row container">Mã Đài xổ số: 
-           <input type='text' name='producerId' value={props.staff.producerId} onChange={(e) => handleChange(e)} />
-           </label>           
-           <label htmlFor="date" className="row container">Ngày xổ số: {props.staff.date.split('-').reverse().join('-')}
-           <input type='date' name='date' value={props.staff.date}  onChange={(e) => handleChange(e)} />
+           <input className="form-control" type='text' name='producer' value={updateVeDo.producer}  onChange={(e) => handleChange(e)} />
+           </label>                     
+           <label htmlFor="date" className="row container">Ngày xổ số: {updateVeDo.date.split('-').reverse().join('-')}
+           <input className="form-control" type='date' name='date' value={updateVeDo.date}  onChange={(e) => handleChange(e)} />
            </label>     
            <br />
            <h4>Cơ Cấu Giải Thưởng</h4>   
-
            <label htmlFor="giaiDB" className="my-3" >
                   Giải Đặc Biệt: 
                   </label>
                   <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiDB}
+                    value={updateVeDo.giaiDB}
+                    onChange={(e) => handleChange(e)}
                     type="text"                    
                     name="giaiDB"
                     id="giaiDB"
-                    maxlength={6}
+                    maxLength={6}
                     margin="2px"
+                    className="form-control"
                   />
                   
                   <label htmlFor="giaiNhat" className="my-3">
                   Giải Nhất: 
                   </label>
                   <input
-                  placeholder={props.staff.prize.rewardNumbers.giaiNhat}
+                  value={updateVeDo.giaiNhat}
+                  onChange={(e) => handleChange(e)}
                     type="text"
                     name="giaiNhat"
                     id="giaiNhat"
-                    maxlength={5}
+                    maxLength={5}
                     margin="2px"
+                    className="form-control"
                   />
                   <label htmlFor="giaiNhi" className="my-3">
                   Giải nhì: 
                   </label>
                   <input
-                  placeholder={props.staff.prize.rewardNumbers.giaiNhi}
+                  value={updateVeDo.giaiNhi}
+                  onChange={(e) => handleChange(e)}
                     type="text"
                     name="giaiNhi"
                     id="giaiNhi"
-                    maxlength={5}
+                    maxLength={5}
                     margin="2px"
+                    className="form-control"
                   />
+                  
                   <InputGroup className="my-3">
                   <label >
                   Giải Ba: 
                   </label>
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiBa.giaiBa1}
+                    value={updateVeDo.giaiBa1}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiBa1"
                       id="giaiBa1"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiBa.giaiBa2}
+                    value={updateVeDo.giaiBa2}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiBa2"
                       id="giaiBa2"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                   </InputGroup>
                   <label >
@@ -144,64 +168,80 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                   </label>
                   <InputGroup className="my-3 ms-3">                
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu1}
+                    value={updateVeDo.giaiTu1}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu1"
                       id="giaiTu1"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu2}
+                    value={updateVeDo.giaiTu2}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu2"
                       id="giaiTu2"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu3}
+                    value={updateVeDo.giaiTu3}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu3"
                       id="giaiTu3"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu4}
+                    value={updateVeDo.giaiTu4}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu4"
                       id="giaiTu4"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu5}
+                    value={updateVeDo.giaiTu5}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu5"
                       id="giaiTu5"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu6}
+                    value={updateVeDo.giaiTu6}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu6"
                       id="giaiTu6"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiTu.giaiTu7}
+                    value={updateVeDo.giaiTu7}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTu7"
                       id="giaiTu7"
-                      maxlength={5}
+                      maxLength={5}
+                      className="form-control"
                     />
                   </InputGroup>
                   <label >
                   Giải Năm: 
                   </label>                 
                   <input
-                  placeholder={props.staff.prize.rewardNumbers.giaiNam}
+                  value={updateVeDo.giaiNam}
+                  onChange={(e) => handleChange(e)}
                     type="text"
                     name="giaiNam"
                     id="giaiNam"
-                    maxlength={4}
+                    maxLength={4}
+                    className="form-control"
                   />
                   <br />
                   <label >
@@ -209,25 +249,31 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                   </label>
                   <InputGroup className="my-3 ms-3">                  
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiSau.giaiSau1}
+                    value={updateVeDo.giaiSau1}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiSau1"
                       id="giaiSau1"
-                      maxlength={4}
+                      maxLength={4}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiSau.giaiSau2}
+                    value={updateVeDo.giaiSau2}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiSau2"
                       id="giaiSau2"
-                      maxlength={4}
+                      maxLength={4}
+                      className="form-control"
                     />
                     <input
-                    placeholder={props.staff.prize.rewardNumbers.giaiSau.giaiSau3}
+                    value={updateVeDo.giaiSau3}
+                    onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiSau3"
                       id="giaiSau3"
-                      maxlength={4}
+                      maxLength={4}
+                      className="form-control"
                     />
                   </InputGroup>
                   
@@ -235,25 +281,29 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                   Giải Bảy: 
                   </label>
                     <input
-                      placeholder="giải bảy"
+                    value={updateVeDo.giaiBay}
+                      onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiBay"
                       id="giaiBay"
-                      maxlength={3}
+                      maxLength={3}
+                      className="form-control"
                     />
                    <label htmlFor="giaiDB" className="my-3" >
                   Giải Tám: 
                   </label>
                     <input
-                      placeholder="giải tám"
+                    value={updateVeDo.giaiTam}
+                      onChange={(e) => handleChange(e)}
                       type="text"
                       name="giaiTam"
                       id="giaiTam"
-                      maxlength={2}
+                      maxLength={2}
+                      className="form-control"
                     />
                   <br />
                 
-           <button type="submit">update</button>
+           <button className="btn btn-warning"type="submit">update</button>
            </form>
           </div>
         </div>

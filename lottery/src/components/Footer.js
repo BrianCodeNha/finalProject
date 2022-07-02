@@ -17,7 +17,7 @@ export default function App() {
                 HONG KONG <br />
                 <i className="fas fa-phone me-3"></i> + 852 1234 5678 <br />
                 <i className="fas fa-fax me-3"></i> + 852 1234 5678 <br />
-                <i className="fas fa-envelope me-3"></i> confusion@food.net{" "}
+                <i className="fas fa-envelope me-3"></i> loterry@lottery.net{" "}
                 <br />
               </p>
             </div>
@@ -53,9 +53,9 @@ export default function App() {
         className="text-center p-4"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
       >
-        © 2021 Copyright:
+        © 2022 Copyright:
         <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-          confusion
+          lottery
         </a>
       </div>
     </MDBFooter>

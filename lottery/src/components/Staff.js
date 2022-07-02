@@ -81,9 +81,9 @@ export default function Staff(props) {
             </div>
           </Link>
         </FadeTransform>
-        <div className="row">
+        
           <div
-            className="btn-group"
+            className="btn-group px-3"
             role="group"
             aria-label="Basic checkbox toggle button group"
           >
@@ -94,12 +94,12 @@ export default function Staff(props) {
               id={staff._id}
               value={staff._id}
             />
-            <label className="btn btn-outline-danger" htmlFor={staff._id}>
+            <label className="btn btn-outline-danger my-2" htmlFor={staff._id}>
               Select
             </label>
-            <DeleteModal staff={staff} deleteEmployee={props.deleteEmployee} signal='veso' />
+            <DeleteModal staff={staff} deleteEmployee={props.deleteEmployee} signal='veso'  />
           </div>
-        </div>
+        
       </div>
     </div>
   ));
