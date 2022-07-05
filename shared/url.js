@@ -1,2 +1,2 @@
-export const frontEndURL = 'http://localhost:3000/'
-export const backEndURL = 'http://localhost:5000/'
+export const frontEndURL = 'https://ephemeral-palmier-d4920f.netlify.app/'
+export const backEndURL = 'https://lotterserverapp.herokuapp.com/'
