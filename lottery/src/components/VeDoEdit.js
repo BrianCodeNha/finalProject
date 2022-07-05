@@ -15,6 +15,11 @@ const mapDispatchToProps = (dispatch) => ({
 export function VeDoEdit(props) { //truyền data fetch từ server truyền vào props     
 
   const EmployeeDetail = () => {
+
+    const [isSubmit, SetIsSubmit] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
+
+
     const [updateVeDo, setUpdateVedo] = useState({
       id: props.staff._id,
       date: props.staff.date,
@@ -41,6 +46,80 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
     });
     console.log("🚀 ~ file: VeDoEdit.js ~ line 19 ~ EmployeeDetail ~ updateVedo", updateVeDo)
 
+    
+
+    const validate = (values) => {
+      const errors = {};
+  
+      if (!values.producer) {
+        errors.producer = "Yêu cầu nhập";
+      } else if (values.producer.length < 3) {
+        errors.producer = "Yêu cầu tối thiểu 2 ký tự";
+      }
+  
+      if (!values.date) {
+        errors.date = "Yêu cầu nhập";
+      }
+  
+      if (!values.giaiDB) {
+        errors.giaiDB = "Yêu cầu nhập";
+      } else if (!values.giaiDB.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiDB = "số vé số không hợp lệ";
+      }
+  
+      if (!values.giaiNhat) {
+        errors.giaiNhat = "Yêu cầu nhập";
+      } else if (!values.giaiNhat.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiNhat = "số vé số không hợp lệ";
+      }
+  
+      if (!values.giaiNhi) {
+        errors.giaiNhi = "Yêu cầu nhập";
+      } else if (!values.giaiNhi.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiNhi = "số vé số không hợp lệ";
+      }
+  
+      if (!values.giaiBa1 || !values.giaiBa2) {
+        errors.giaiBa = "Yêu cầu nhập";
+      } else if (!values.giaiBa1.match(/^-?\d+\.?\d*$/) || !values.giaiBa2.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiBa = "số vé số không hợp lệ";
+      }
+  
+      if (!values.giaiTu1 || !values.giaiTu2 || !values.giaiTu3 || !values.giaiTu4 || !values.giaiTu5 || !values.giaiTu6 || !values.giaiTu7) {
+        errors.giaiTu = "Yêu cầu nhập";
+      } else if (!values.giaiTu1.match(/^-?\d+\.?\d*$/) || !values.giaiTu2.match(/^-?\d+\.?\d*$/) || !values.giaiTu3.match(/^-?\d+\.?\d*$/) || !values.giaiTu4.match(/^-?\d+\.?\d*$/) || !values.giaiTu5.match(/^-?\d+\.?\d*$/) || !values.giaiTu6.match(/^-?\d+\.?\d*$/) || !values.giaiTu7.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiTu = "số vé số không hợp lệ";
+      }
+  
+      if (!values.giaiNam) {
+        errors.giaiNam = "Yêu cầu nhập";
+      } else if (!values.giaiNam.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiNam = "số vé số không hợp lệ";
+      }
+      
+      if (!values.giaiSau1 || !values.giaiSau2 || !values.giaiSau3) {
+        errors.giaiSau = "Yêu cầu nhập";
+      } else if (!values.giaiSau1.match(/^-?\d+\.?\d*$/) || !values.giaiSau2.match(/^-?\d+\.?\d*$/) || !values.giaiSau3.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiSau = "số vé số không hợp lệ";
+      }
+      
+      if (!values.giaiBay) {
+        errors.giaiBay = "Yêu cầu nhập";
+      } else if (!values.giaiBay.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiBay = "số vé số không hợp lệ";
+      }
+      
+      if (!values.giaiTam) {
+        errors.giaiTam = "Yêu cầu nhập";
+      } else if (!values.giaiTam.match(/^-?\d+\.?\d*$/)) {
+        errors.giaiTam = "số vé số không hợp lệ";
+      }
+  
+  
+      SetIsSubmit(true);  
+      return errors;
+    };
+
     if (props.isLoading){
       return (
         <div className="container">
@@ -62,8 +141,13 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(updateVeDo)
-       props.updateVeDo(updateVeDo.id, updateVeDo);
+        setFormErrors(validate(updateVeDo));
+    console.log("🚀 ~ file: QuanLyVeDo.js ~ line 64 ~ handleSubmit ~ isSubmit", isSubmit)
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      props.updateVeDo(updateVeDo.id, updateVeDo);
+    }
+
+       
       }
       
       const handleChange = (e) => {
@@ -93,9 +177,11 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
            <form className='p-2' onSubmit={handleSubmit}>           
            <label htmlFor="producer" className="row container">Đài xổ số: 
            <input className="form-control" type='text' name='producer' value={updateVeDo.producer}  onChange={(e) => handleChange(e)} />
+           {formErrors.producer && <div style={{ color: "#dc3545" }}>{formErrors.producer}</div>}
            </label>                     
            <label htmlFor="date" className="row container">Ngày xổ số: {updateVeDo.date.split('-').reverse().join('-')}
            <input className="form-control" type='date' name='date' value={updateVeDo.date}  onChange={(e) => handleChange(e)} />
+           {formErrors.date && <div style={{ color: "#dc3545" }}>{formErrors.date}</div>}
            </label>     
            <br />
            <h4>Cơ Cấu Giải Thưởng</h4>   
@@ -112,6 +198,7 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                     margin="2px"
                     className="form-control"
                   />
+           {formErrors.giaiDB && <div style={{ color: "#dc3545" }}>{formErrors.giaiDB}</div>}
                   
                   <label htmlFor="giaiNhat" className="my-3">
                   Giải Nhất: 
@@ -126,6 +213,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                     margin="2px"
                     className="form-control"
                   />
+           {formErrors.giaiNhat && <div style={{ color: "#dc3545" }}>{formErrors.giaiNhat}</div>}
+
                   <label htmlFor="giaiNhi" className="my-3">
                   Giải nhì: 
                   </label>
@@ -139,6 +228,7 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                     margin="2px"
                     className="form-control"
                   />
+           {formErrors.giaiNhi && <div style={{ color: "#dc3545" }}>{formErrors.giaiNhi}</div>}
                   
                   <InputGroup className="my-3">
                   <label >
@@ -153,6 +243,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiBa1 && <div style={{ color: "#dc3545" }}>{formErrors.giaiBa1}</div>}
+
                     <input
                     value={updateVeDo.giaiBa2}
                     onChange={(e) => handleChange(e)}
@@ -162,6 +254,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiBa2 && <div style={{ color: "#dc3545" }}>{formErrors.giaiBa2}</div>}
+
                   </InputGroup>
                   <label >
                   Giải Tư: 
@@ -176,6 +270,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu1 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu1}</div>}
+
                     <input
                     value={updateVeDo.giaiTu2}
                     onChange={(e) => handleChange(e)}
@@ -185,6 +281,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu2 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu2}</div>}
+
                     <input
                     value={updateVeDo.giaiTu3}
                     onChange={(e) => handleChange(e)}
@@ -194,6 +292,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu3 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu3}</div>}
+
                     <input
                     value={updateVeDo.giaiTu4}
                     onChange={(e) => handleChange(e)}
@@ -203,6 +303,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu4 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu4}</div>}
+
                     <input
                     value={updateVeDo.giaiTu5}
                     onChange={(e) => handleChange(e)}
@@ -212,6 +314,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu5 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu5}</div>}
+
                     <input
                     value={updateVeDo.giaiTu6}
                     onChange={(e) => handleChange(e)}
@@ -221,6 +325,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu6 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu6}</div>}
+
                     <input
                     value={updateVeDo.giaiTu7}
                     onChange={(e) => handleChange(e)}
@@ -230,6 +336,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={5}
                       className="form-control"
                     />
+           {formErrors.giaiTu7 && <div style={{ color: "#dc3545" }}>{formErrors.giaiTu7}</div>}
+                    
                   </InputGroup>
                   <label >
                   Giải Năm: 
@@ -243,6 +351,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                     maxLength={4}
                     className="form-control"
                   />
+           {formErrors.giaiNam && <div style={{ color: "#dc3545" }}>{formErrors.giaiNam}</div>}
+                  
                   <br />
                   <label >
                   Giải Sáu: 
@@ -257,6 +367,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={4}
                       className="form-control"
                     />
+           {formErrors.giaiSau1 && <div style={{ color: "#dc3545" }}>{formErrors.giaiSau1}</div>}
+
                     <input
                     value={updateVeDo.giaiSau2}
                     onChange={(e) => handleChange(e)}
@@ -266,6 +378,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={4}
                       className="form-control"
                     />
+           {formErrors.giaiSau2 && <div style={{ color: "#dc3545" }}>{formErrors.giaiSau2}</div>}
+
                     <input
                     value={updateVeDo.giaiSau3}
                     onChange={(e) => handleChange(e)}
@@ -275,6 +389,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={4}
                       className="form-control"
                     />
+           {formErrors.giaiSau3 && <div style={{ color: "#dc3545" }}>{formErrors.giaiSau3}</div>}
+
                   </InputGroup>
                   
                   <label htmlFor="giaiDB" className="my-3" >
@@ -289,6 +405,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={3}
                       className="form-control"
                     />
+           {formErrors.giaiBay && <div style={{ color: "#dc3545" }}>{formErrors.giaiBay}</div>}
+
                    <label htmlFor="giaiDB" className="my-3" >
                   Giải Tám: 
                   </label>
@@ -301,6 +419,8 @@ export function VeDoEdit(props) { //truyền data fetch từ server truyền và
                       maxLength={2}
                       className="form-control"
                     />
+           {formErrors.giaiTam && <div style={{ color: "#dc3545" }}>{formErrors.giaiTam}</div>}
+
                   <br />
                 
            <button className="btn btn-warning"type="submit">update</button>

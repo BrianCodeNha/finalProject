@@ -27,6 +27,31 @@ export function Employee(props) {
       id: props.staff._id,
     });
 
+    const [isSubmit, SetIsSubmit] = useState(false);
+    const [formErrors, setFormErrors] = useState({ name: "" });
+
+    const validate = (values) => {
+      const errors = {};
+  
+      if (!values.producer) {
+        errors.producer = "Yêu cầu nhập";
+      } else if (values.producer.length < 3) {
+        errors.producer = "Yêu cầu tối thiểu 2 ký tự";
+      }
+  
+      if (!values.date) {
+        errors.date = "Yêu cầu nhập";
+      }
+  
+      if (!values.number) {
+        errors.number = "Yêu cầu nhập";
+      } else if (!values.number.match(/^-?\d+\.?\d*$/)) {
+        errors.number = "số vé số không hợp lệ";
+      }
+  
+      return errors;
+    };
+
     if (props.isLoading) {
       return (
         <div className="container">
@@ -48,12 +73,18 @@ export function Employee(props) {
         "🚀 ~ file: Employee.js ~ line 34 ~ EmployeeDetail ~ props.staff",
         props.staff
       );      
+      
+      
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(updatedTicket);
-        props.updateEmployee(updatedTicket.id, updatedTicket);
-        console.log("🚀 ~ file: Employee.js ~ line 56 ~ handleSubmit ~ props.updateEmployee", props.updateEmployee)
+        setFormErrors(validate(updatedTicket));
+    SetIsSubmit(true);
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+
+      props.updateEmployee(updatedTicket.id, updatedTicket);
+    }
+
       };
 
       const handleChange = (e) => {
@@ -90,6 +121,7 @@ export function Employee(props) {
                   value={updatedTicket.number}
                   onChange={(e) => handleChange(e)}
                 />
+                {formErrors.number && <div style={{ color: "#dc3545" }}>{formErrors.number}</div>}
               </label>
               <label htmlFor="producer" className="row container">
                 Đài xổ số:
@@ -99,6 +131,7 @@ export function Employee(props) {
                   value={props.staff.producer}
                   onChange={(e) => handleChange(e)}
                 />
+                {formErrors.producer && <div style={{ color: "#dc3545" }}>{formErrors.producer}</div>}
               </label>
               <label htmlFor="date" className="row container">
                 Ngày xổ số:
@@ -108,6 +141,7 @@ export function Employee(props) {
                   value={props.staff.date}
                   onChange={(e) => handleChange(e)}
                 />
+                {formErrors.date && <div style={{ color: "#dc3545" }}>{formErrors.date}</div>}
               </label>
               <button type="submit">update</button>
             </form>

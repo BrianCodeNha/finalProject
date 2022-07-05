@@ -514,7 +514,7 @@ export const fetchStaffsAdmin = () => (dispatch) => {
 export const fetchUsers = () => (dispatch) => {
   dispatch(staffLoading(true));
 console.log('fetch user')
-  return axios.get("${backEndURL}admin/user")
+  return axios.get(`${backEndURL}admin/user`)
     .then(
       (response) => {
       console.log("🚀 ~ file: ActionCreator.js ~ line 176 ~ fetchUsers ~ response", response.data)

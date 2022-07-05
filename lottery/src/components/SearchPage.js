@@ -31,7 +31,9 @@ export default function SearchPage({staffs, users, veDoList, userStatus}) {
             : staff.date
           ).toLowerCase().indexOf(term) !== -1
       )}      
-
+      term={term}
+      option={option}
+      userStatus={userStatus}
       onClick={(selectedID) => selectedEmployee(selectedID)}
     />
   );}

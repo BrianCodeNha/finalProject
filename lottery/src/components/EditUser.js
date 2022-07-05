@@ -12,8 +12,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateUser(editId, Editedemployee)),
 });
 
+const mapStateToProps = (state) => ({
+  users: state.users,
+});
+
 export function EditUser(props) {
   //truyền data fetch từ server truyền vào props
+  console.log("🚀 ~ file: EditUser.js ~ line 17 ~ users", props.users)
 
   const EmployeeDetail = () => {
 
@@ -125,4 +130,4 @@ export function EditUser(props) {
   return <EmployeeDetail />;
 }
 
-export default connect(null, mapDispatchToProps)(EditUser);
+export default connect(mapStateToProps, mapDispatchToProps)(EditUser);

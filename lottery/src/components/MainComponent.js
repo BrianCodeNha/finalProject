@@ -6,7 +6,7 @@ import SearchPage from "./SearchPage";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Staff from "./Staff";
 import { connect } from "react-redux";
-import {  
+import {
   fetchStaffs,
   fetchStaffsAdmin,
   postStaff,
@@ -53,27 +53,24 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProp = (dispatch) => ({
   fetchStaffs: () => {
     dispatch(fetchStaffs());
-  },  
+  },
   fetchStaffsAdmin: () => {
     dispatch(fetchStaffsAdmin());
-  },  
+  },
   fetchUsers: () => {
     dispatch(fetchUsers());
-  },  
+  },
   fetchVeDo: () => {
     dispatch(fetchVeDo());
-  },  
+  },
   postStaff: (veso) => {
-    dispatch(
-      postStaff(veso));
+    dispatch(postStaff(veso));
   },
   postStaffAdmin: (veso) => {
-    dispatch(
-      postStaffAdmin(veso));
+    dispatch(postStaffAdmin(veso));
   },
   postVedo: (vedo) => {
-    dispatch(
-      postVedo(vedo));
+    dispatch(postVedo(vedo));
   },
   deleteEmployee: (id, number, producer) => {
     dispatch(deleteEmployee(id, number, producer));
@@ -117,14 +114,14 @@ export function MainComponent({
   loadUserStatus,
   isLoading,
   errMess,
-  fetchStaffs,  
+  fetchStaffs,
   fetchStaffsAdmin,
   fetchVeDo,
   veDoList,
   postStaff,
   postStaffAdmin,
   postVedo,
-  fetchUsers,  
+  fetchUsers,
   updateEmployee,
   updateVeDo,
   updateUser,
@@ -134,37 +131,34 @@ export function MainComponent({
   deactivateUser,
   deleteSelectedItem,
   deleteSelectedUser,
-  deleteSelectedVedo
+  deleteSelectedVedo,
 }) {
-
   axios.defaults.withcredentials = true;
   //store stafflist here
   // const [veDoList, setVeDoList] = useState([]);
 
-
   useEffect(() => {
     // insert mapDispatchToProp
 
-    const fetchLoginInfo = async () => {     
-      console.log('getdata Ve Do')
+    const fetchLoginInfo = async () => {
+      console.log("getdata Ve Do");
       // const response1 = await axios.get(
       //   "http://localhost:5000/admin/checkticket"
       // );
-      // setVeDoList(response1.data);    
+      // setVeDoList(response1.data);
 
-      console.log('getUserStatus')
-      const response2 = await axios.get(backEndURL + 'authen/login', {withCredentials: true})
-      loadUserStatus(response2.data)     
-      
+      console.log("getUserStatus");
+      const response2 = await axios.get(backEndURL + "authen/login", {
+        withCredentials: true,
+      });
+      loadUserStatus(response2.data);
     };
     fetchLoginInfo();
     fetchVeDo();
-    userStatus.role === 'user' && fetchStaffs();
-    userStatus.role === 'admin' && fetchStaffsAdmin();
-    userStatus.role === 'admin' && fetchUsers();
-  },[userStatus.role] ); // component Did mount
-
-  
+    userStatus.role === "user" && fetchStaffs();
+    userStatus.role === "admin" && fetchStaffsAdmin();
+    userStatus.role === "admin" && fetchUsers();
+  }, [userStatus.role]); // component Did mount
 
   //staffId for idividiual view
 
@@ -177,36 +171,40 @@ export function MainComponent({
   // this is for sort entry
 
   const [property, setProperty] = useState(""); //store sortEntry here
-  console.log("🚀 ~ file: MainComponent.js ~ line 132 ~ property", property)
+  console.log("🚀 ~ file: MainComponent.js ~ line 132 ~ property", property);
 
   const sortDataEntry = (entry) => {
-  console.log("🚀 ~ file: MainComponent.js ~ line 135 ~ sortDataEntry ~ entry", entry)
+    console.log(
+      "🚀 ~ file: MainComponent.js ~ line 135 ~ sortDataEntry ~ entry",
+      entry
+    );
     setProperty(entry);
     ticketListFromServer.sort(function (a, b) {
       if (entry === "number") {
         return b.number - a.number;
-      } else if (entry === "producer") {        
+      } else if (entry === "producer") {
         if (a.producer.toLowerCase() > b.producer.toLowerCase()) return 1;
         else if (a.producer.toLowerCase() < b.producer.toLowerCase()) return -1;
       } else if (entry === "date") {
         if (a.date.toLowerCase() > b.date.toLowerCase()) return 1;
         if (a.date.toLowerCase() < b.date.toLowerCase()) return -1;
-      }      
-      return null
+      }
+      return null;
     });
 
     veDoList.sort(function (a, b) {
       if (entry === "producerId") {
         if (a.producerId.toLowerCase() > b.producerId.toLowerCase()) return 1;
-        else if (a.producerId.toLowerCase() < b.producerId.toLowerCase()) return -1;
-      } else if (entry === "producer") {        
+        else if (a.producerId.toLowerCase() < b.producerId.toLowerCase())
+          return -1;
+      } else if (entry === "producer") {
         if (a.producer.toLowerCase() > b.producer.toLowerCase()) return 1;
         else if (a.producer.toLowerCase() < b.producer.toLowerCase()) return -1;
       } else if (entry === "date") {
         if (a.date.toLowerCase() > b.date.toLowerCase()) return 1;
         if (a.date.toLowerCase() < b.date.toLowerCase()) return -1;
-      }      
-      return null
+      }
+      return null;
     });
 
     usersFromBackEnd.sort(function (a, b) {
@@ -219,11 +217,11 @@ export function MainComponent({
       } else if (entry === "phone") {
         if (a.phone.toLowerCase() > b.phone.toLowerCase()) return 1;
         if (a.phone.toLowerCase() < b.phone.toLowerCase()) return -1;
-      }      
-      return null
+      }
+      return null;
     });
 
-    return null
+    return null;
   };
 
   const staffWithId = ({ match }) => (
@@ -239,8 +237,6 @@ export function MainComponent({
     />
   );
 
-  
-
   const veDoWithId = ({ match }) => (
     <VeDoEdit
       staff={
@@ -253,7 +249,7 @@ export function MainComponent({
       updateVeDo={updateVeDo}
     />
   );
-  
+
   const userWithId = ({ match }) => (
     <EditUser
       staff={
@@ -266,41 +262,38 @@ export function MainComponent({
       errMess={errMess}
     />
   );
- 
 
   return (
     <div>
       <BrowserRouter>
         <Header userStatus={userStatus} loadUserStatus={loadUserStatus} />
 
-        <Switch>          
-
-          <Route exact='true' path="/">
-          <QuanLyVeDo 
-          veDoList={veDoList} 
-          postVedo={postVedo}
-          userStatus={userStatus}
-          getSortEntry={(entry) => sortDataEntry(entry)}
-          deleteEmployee={deleteVeDo}
-          deleteSelectedItem={deleteSelectedVedo}
-          />
+        <Switch>
+          <Route exact="true" path="/">
+            <QuanLyVeDo
+              veDoList={veDoList}
+              postVedo={postVedo}
+              postStaff={postStaff}
+              postStaffAdmin={postStaffAdmin}
+              userStatus={userStatus}
+              getSortEntry={(entry) => sortDataEntry(entry)}
+              deleteEmployee={deleteVeDo}
+              deleteSelectedItem={deleteSelectedVedo}
+            />
           </Route>
-          <Route exact='true' path="/login">
-          <Login
-          userStatus={userStatus}
-          loadUserStatus={loadUserStatus}
-          />
+          <Route exact="true" path="/login">
+            <Login userStatus={userStatus} loadUserStatus={loadUserStatus} />
           </Route>
-          <Route exact='true' path="/signup">
-          <SignUp
-          userStatus={userStatus}
-          loadUserStatus={loadUserStatus}
-          />
+          <Route exact="true" path="/signup">
+            <SignUp userStatus={userStatus} loadUserStatus={loadUserStatus} />
           </Route>
-          <Route exact='true' path="/vedo/:veDoId">{veDoWithId}</Route>
-          <Route exact='true' path="/veso">
+          <Route exact="true" path="/vedo/:veDoId">
+            {veDoWithId}
+          </Route>
+          <Route exact="true" path="/veso">
             <Staff
               staffs={ticketListFromServer}
+              postStaffAdmin={postStaffAdmin}
               veDoList={veDoList}
               onClick={(selectedID) => selectedEmployee(selectedID)}
               getSortEntry={(entry) => sortDataEntry(entry)}
@@ -310,20 +303,20 @@ export function MainComponent({
               errorMess={errMess}
               userStatus={userStatus}
             />
-            </Route>
-            <Route exact='true' path="/userprofile">
-              <UserProfile
-                staffs={ticketListFromServer}
-                onClick={(selectedID) => selectedEmployee(selectedID)}
-                getSortEntry={(entry) => sortDataEntry(entry)}
-                deleteEmployee={deleteEmployee}
-                deleteSelectedItem={deleteSelectedItem}
-                isLoading={isLoading}
-                errorMess={errMess}
-                userStatus={userStatus}
-              />
-              </Route>
-          <Route exact='true' path="/admin/user">
+          </Route>
+          <Route exact="true" path="/userprofile">
+            <UserProfile
+              staffs={ticketListFromServer}
+              onClick={(selectedID) => selectedEmployee(selectedID)}
+              getSortEntry={(entry) => sortDataEntry(entry)}
+              deleteEmployee={deleteEmployee}
+              deleteSelectedItem={deleteSelectedItem}
+              isLoading={isLoading}
+              errorMess={errMess}
+              userStatus={userStatus}
+            />
+          </Route>
+          <Route exact="true" path="/admin/user">
             <ManageUser
               staffs={usersFromBackEnd}
               onClick={(selectedID) => selectedEmployee(selectedID)}
@@ -335,13 +328,21 @@ export function MainComponent({
               errorMess={errMess}
             />
           </Route>
-          <Route exact='true' path="/admin/user/:userId">{userWithId}</Route>
-          <Route exact='true' path="/veso/:staffId">{staffWithId}</Route>
+          <Route exact="true" path="/admin/user/:userId">
+            {userWithId}
+          </Route>
+          <Route exact="true" path="/veso/:staffId">
+            {staffWithId}
+          </Route>
           <Route path="/search">
-            <SearchPage staffs={ticketListFromServer} users={usersFromBackEnd} veDoList={veDoList} userStatus={userStatus} />
-          </Route>          
-          <Redirect to="/" />          
-         
+            <SearchPage
+              staffs={ticketListFromServer}
+              users={usersFromBackEnd}
+              veDoList={veDoList}
+              userStatus={userStatus}
+            />
+          </Route>
+          <Redirect to="/" />
         </Switch>
 
         <Footer />

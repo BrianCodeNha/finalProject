@@ -75,6 +75,7 @@ export function SearchBar(props) {
       {(props.signal === 'vedo') && <div className="my-3 mx-5">
         <AddEmployee 
         postStaff = {props.postStaff}
+        postVedo = {props.postVedo}
         postStaffAdmin = {props.postStaffAdmin}
         staffList = {props.staffList}
         userStatus = {props.userStatus}
@@ -88,6 +89,7 @@ export function SearchBar(props) {
         postStaffAdmin = {props.postStaffAdmin}
         staffList = {props.staffList}
         userStatus = {props.userStatus}
+        signal= 'veso'
         veDoList= {props.veDoList}
          />
       </div>}

@@ -67,6 +67,7 @@ export default function ManageUsers(props) {
             }}
             className='row'
           >
+
             <div className="col-2 btn-group mx-3">
             <div>
               <input
@@ -106,7 +107,8 @@ export default function ManageUsers(props) {
                 role={staff.role}
               />
             </div>
-            <Link className='col-8' exact="true" to={`/admin/user/${staff._id}`}>
+
+            <Link className='col-lg-8 col-md-6 my-2' exact="true" to={`/admin/user/${staff._id}`}>
             <span className='row my-2' >
               <span className="col-3 ">
                 {" "}
@@ -126,6 +128,7 @@ export default function ManageUsers(props) {
               </span>
               </span>
             </Link>
+
           </div>
         </FadeTransform>
         <div className="row">

@@ -21,6 +21,7 @@ export default function AddEmployee(props) {
   };
 
   const veDoList = props.veDoList;
+  console.log("🚀 ~ file: Modal.js ~ line 24 ~ AddEmployee ~ props.veDoList", props.veDoList)
 
   const [newVeSo, setNewVeSo] = useState(initialState);
 
@@ -196,17 +197,15 @@ export default function AddEmployee(props) {
   // submit new Employee function
 
   const handleSubmit = (e) => {
+    console.log("Submit")
     e.preventDefault();
     setFormErrors(validate(newVeSo));
     SetIsSubmit(true);
     if (Object.keys(formErrors).length === 0 && isSubmit) {
-      handleClose();
-      console.log(
-        "🚀 ~ file: Modal.js ~ line 70 ~ handleSubmit ~ newVeSo",
-        newVeSo
-      );
-      props.userStatus === 'user' && props.postStaff(newVeSo);
-      props.userStatus === 'admin' && props.postStaffAdmin(newVeSo);
+      handleClose();      
+      console.log("🚀 ~ file: Modal.js ~ line 206 ~ handleSubmit ~ props.postStaff", props.postStaff)
+      props.userStatus.role === 'user' && props.postStaff(newVeSo);
+      props.userStatus.role === 'admin' && props.postStaffAdmin(newVeSo);
       setNewVeSo(initialState);
     }
   };
@@ -238,7 +237,8 @@ export default function AddEmployee(props) {
                   <option>Chọn</option>
                   <option>Bình Thuận</option>
                   <option>Tây Ninh</option>
-                  <option>A Thơ</option>
+                  <option>Cần Thơ</option>
+                  <option>Vĩnh Long</option>
                 </select>
                 <div style={{ color: "#dc3545" }}>{formErrors.producer}</div>
               </Col>
@@ -307,7 +307,7 @@ export default function AddEmployee(props) {
               </Button>
 
             {props.userStatus.isLoggedIn && (
-              <Button variant="primary" type="submit">
+              <Button variant="primary" onClick={handleSubmit}>
                 Thêm
               </Button>
             )}

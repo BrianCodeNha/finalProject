@@ -97,6 +97,15 @@ function Login({ userStatus, loadUserStatus }) {
           Login
         </button>
       </form>
+      <div className='d-flex justify-content-center'>
+      admin: bluedrago999@gmail.com - pass: Chi09# 
+      
+      </div>
+      <div className='d-flex justify-content-center'>
+      user: lazytoeic@gmail.com - Pass: cHI09#
+
+      
+      </div>
     </div>
   );
 }
