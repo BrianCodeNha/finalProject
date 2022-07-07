@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdb-react-ui-kit";
 import { Loading } from "./Loading";
@@ -22,13 +22,23 @@ export function EditUser(props) {
 
   const EmployeeDetail = () => {
 
+    const data = window.sessionStorage.getItem('userData')
+    const [userData, setUserData] = useState(props.staff ? props.staff : JSON.parse(data));
+    
+
+    useEffect(() => {
+      props.staff !== undefined &&  window.sessionStorage.setItem('userData', JSON.stringify(props.staff)); 
+      console.log('create localStorage')
+      setUserData(JSON.parse(data));      
+                   
+    },[])
     const [updateUser, setUpdateUser] = useState({
-      username: props.staff.username,
-      email: props.staff.email,
-      password: props.staff.password,
-      phone: props.staff.phone,
-      role: props.staff.role,
-      id: props.staff._id,
+      username: userData.username,
+      email: userData.email,
+      password: userData.password,
+      phone: userData.phone,
+      role: userData.role,
+      id: userData._id,
     });
     console.log("🚀 ~ file: EditUser.js ~ line 28 ~ EmployeeDetail ~ updateUser", updateUser)
 

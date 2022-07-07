@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dateFormat from "dateformat";
 import { Link } from "react-router-dom";
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdb-react-ui-kit";
@@ -19,17 +19,26 @@ export function Employee(props) {
 
   const EmployeeDetail = () => {
 
-    const [updatedTicket, setUpdatedTicket] = useState({
-      date: props.staff.date,
-      number: props.staff.number,
-      producer: props.staff.producer,
-      userId: props.staff.userId,
-      id: props.staff._id,
-    });
-
     const [isSubmit, SetIsSubmit] = useState(false);
     const [formErrors, setFormErrors] = useState({ name: "" });
+    const data = window.sessionStorage.getItem('vesoData')
+    const [vesoData, setVesoData] = useState(props.staff ? props.staff : JSON.parse(data));
 
+    useEffect(() => {
+      props.staff !== undefined &&  window.sessionStorage.setItem('vesoData', JSON.stringify(props.staff)); 
+      console.log('create sessionStorage')
+      setVesoData(JSON.parse(data));       
+      
+      
+    },[])
+
+    const [updatedTicket, setUpdatedTicket] = useState({
+      date: vesoData.date,
+      number: vesoData.number,
+      producer: vesoData.producer,
+      userId: vesoData.userId,
+      id: vesoData._id,
+    });
     const validate = (values) => {
       const errors = {};
   
@@ -68,14 +77,8 @@ export function Employee(props) {
           </div>
         </div>
       );
-    } else if (props.staff != null) {
-      console.log(
-        "🚀 ~ file: Employee.js ~ line 34 ~ EmployeeDetail ~ props.staff",
-        props.staff
-      );      
-      
-      
-
+    } else if (props.staff != null) {     
+            
       const handleSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(updatedTicket));

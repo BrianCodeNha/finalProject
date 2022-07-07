@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dateFormat from 'dateformat'
 import {Link} from 'react-router-dom'
 import { MDBBreadcrumb, MDBBreadcrumbItem } from "mdb-react-ui-kit";
@@ -14,38 +14,46 @@ const mapDispatchToProps = (dispatch) => ({
 
 export function VeDoEdit(props) { //truyền data fetch từ server truyền vào props     
 
+  
   const EmployeeDetail = () => {
 
     const [isSubmit, SetIsSubmit] = useState(false);
     const [formErrors, setFormErrors] = useState({});
+    const data = window.sessionStorage.getItem('vedoData')
+    const [vedoData, setVedoData] = useState(props.staff ? props.staff : JSON.parse(data));
 
-
+    useEffect(() => {
+      props.staff !== undefined &&  window.sessionStorage.setItem('vedoData', JSON.stringify(props.staff)); 
+      console.log('create localStorage')
+      setVedoData(JSON.parse(data));                      
+    },[])
+    
+ 
     const [updateVeDo, setUpdateVedo] = useState({
-      id: props.staff._id,
-      date: props.staff.date,
-      producer: props.staff.producer,
-      producerId: props.staff.producerId,
-      giaiBa1: props.staff.prize.rewardNumbers.giaiBa.giaiBa1,
-      giaiBa2: props.staff.prize.rewardNumbers.giaiBa.giaiBa2,
-      giaiBay: props.staff.prize.rewardNumbers.giaiBay,
-      giaiDB: props.staff.prize.rewardNumbers.giaiDB,
-      giaiNam: props.staff.prize.rewardNumbers.giaiNam,
-      giaiNhat: props.staff.prize.rewardNumbers.giaiNhat,
-      giaiNhi: props.staff.prize.rewardNumbers.giaiNhi,
-      giaiSau1: props.staff.prize.rewardNumbers.giaiSau.giaiSau1,
-      giaiSau2: props.staff.prize.rewardNumbers.giaiSau.giaiSau2,
-      giaiSau3: props.staff.prize.rewardNumbers.giaiSau.giaiSau3,
-      giaiTam: props.staff.prize.rewardNumbers.giaiTam,
-      giaiTu1: props.staff.prize.rewardNumbers.giaiTu.giaiTu1,
-      giaiTu2: props.staff.prize.rewardNumbers.giaiTu.giaiTu2,
-      giaiTu3: props.staff.prize.rewardNumbers.giaiTu.giaiTu3,
-      giaiTu4: props.staff.prize.rewardNumbers.giaiTu.giaiTu4,
-      giaiTu5: props.staff.prize.rewardNumbers.giaiTu.giaiTu5,
-      giaiTu6: props.staff.prize.rewardNumbers.giaiTu.giaiTu6,
-      giaiTu7: props.staff.prize.rewardNumbers.giaiTu.giaiTu7,
+      id: vedoData._id,
+      date: vedoData.date,
+      producer: vedoData.producer,
+      producerId: vedoData.producerId,
+      giaiBa1: vedoData.prize.rewardNumbers.giaiBa.giaiBa1,
+      giaiBa2: vedoData.prize.rewardNumbers.giaiBa.giaiBa2,
+      giaiBay: vedoData.prize.rewardNumbers.giaiBay,
+      giaiDB: vedoData.prize.rewardNumbers.giaiDB,
+      giaiNam: vedoData.prize.rewardNumbers.giaiNam,
+      giaiNhat: vedoData.prize.rewardNumbers.giaiNhat,
+      giaiNhi: vedoData.prize.rewardNumbers.giaiNhi,
+      giaiSau1: vedoData.prize.rewardNumbers.giaiSau.giaiSau1,
+      giaiSau2: vedoData.prize.rewardNumbers.giaiSau.giaiSau2,
+      giaiSau3: vedoData.prize.rewardNumbers.giaiSau.giaiSau3,
+      giaiTam: vedoData.prize.rewardNumbers.giaiTam,
+      giaiTu1: vedoData.prize.rewardNumbers.giaiTu.giaiTu1,
+      giaiTu2: vedoData.prize.rewardNumbers.giaiTu.giaiTu2,
+      giaiTu3: vedoData.prize.rewardNumbers.giaiTu.giaiTu3,
+      giaiTu4: vedoData.prize.rewardNumbers.giaiTu.giaiTu4,
+      giaiTu5: vedoData.prize.rewardNumbers.giaiTu.giaiTu5,
+      giaiTu6: vedoData.prize.rewardNumbers.giaiTu.giaiTu6,
+      giaiTu7: vedoData.prize.rewardNumbers.giaiTu.giaiTu7,
     });
     console.log("🚀 ~ file: VeDoEdit.js ~ line 19 ~ EmployeeDetail ~ updateVedo", updateVeDo)
-
     
 
     const validate = (values) => {
